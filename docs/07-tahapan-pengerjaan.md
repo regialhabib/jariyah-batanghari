@@ -57,28 +57,28 @@ Fase 0 dan 1 adalah **fondasi** dan dikerjakan berurutan oleh satu pelaksana (su
 - [x] `migrate:fresh --seed` dan `php artisan test` lulus (48 test)
 
 ## Fase 2 · Halaman publik (G1-A)
-- [ ] Beranda
-- [ ] Tentang
-- [ ] Informasi Wakaf + detail artikel
-- [ ] Persyaratan
-- [ ] Panduan (+ unduh ZIP)
-- [ ] FAQ
-- [ ] Kontak (simpan pesan, rate limit, honeypot)
-- [ ] Daftar Nazir
-- [ ] Unduhan formulir
+- [x] Beranda
+- [x] Tentang
+- [x] Informasi Wakaf + detail artikel
+- [x] Persyaratan
+- [x] Panduan (+ unduh ZIP)
+- [x] FAQ
+- [x] Kontak (simpan pesan, rate limit, honeypot)
+- [x] Daftar Nazir
+- [x] Unduhan formulir
 
 ## Fase 3 · Autentikasi (G1-B)
-- [ ] Login dua kolom sesuai mockup, email/username, cek `is_active`
-- [ ] Registrasi Nazir (NIK, No. HP, S&K, tanpa role)
-- [ ] Redirect per role setelah login
-- [ ] Lupa/reset password + verifikasi email dengan gaya yang sama
+- [x] Login dua kolom sesuai mockup, email/username, cek `is_active`
+- [x] Registrasi Nazir (NIK, No. HP, S&K, tanpa role)
+- [x] Redirect per role setelah login
+- [x] Lupa/reset password + verifikasi email dengan gaya yang sama
 
 ## Fase 4 · Peta (G1-C)
-- [ ] Endpoint GeoJSON `/api/peta` + filter
-- [ ] Komponen `petaWakaf`: toggle Peta/Satelit, marker berwarna, popup, polygon, legenda
-- [ ] Halaman publik Peta Wakaf + panel filter & informasi
-- [ ] Detail tanah publik
-- [ ] Mode mini (dashboard) dan mode pilih lokasi + gambar polygon (wizard)
+- [x] Endpoint GeoJSON `/api/peta` + filter
+- [x] Komponen `petaWakaf`: toggle Peta/Satelit, marker berwarna, popup, polygon, legenda
+- [x] Halaman publik Peta Wakaf + panel filter & informasi
+- [x] Detail tanah publik
+- [x] Mode mini (dashboard) dan mode pilih lokasi + gambar polygon (wizard)
 
 ## Fase 5 · Area Nazir (G2-D)
 - [ ] Dashboard (kartu, tabel terbaru, peta mini)

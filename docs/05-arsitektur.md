@@ -153,6 +153,7 @@ new #[Layout('layouts::publik'), Title('Persyaratan')] class extends Component {
 | `x-data="grafikSebaran(@js($data))"` + `<canvas x-ref="canvas">` | Grafik batang per kecamatan |
 | `App\Services\StatistikWakaf` | `ringkasan(?User)`, `perKecamatan(?User)`, `pengajuanPerStatus(User)` |
 | `TanahWakaf::dataPublik()` | Data aman untuk publik, tanpa NIK/HP |
+| `<x-peta mode="publik\|data" :data="[...]" />`, `<x-peta-pilih lat="latitude" lng="longitude" batas="batas_geojson" />` | Peta Leaflet dan pemilih lokasi, lihat [komponen-peta.md](komponen-peta.md) |
 | Ikon | Nama heroicons via `<flux:icon name="..." />` atau `<flux:icon.nama />` |
 
 ## Tema
