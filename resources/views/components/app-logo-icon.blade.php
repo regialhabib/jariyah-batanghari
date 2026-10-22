@@ -1,8 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 42" {{ $attributes }}>
-    <path 
-        fill="currentColor" 
-        fill-rule="evenodd" 
-        clip-rule="evenodd"
-        d="M17.2 5.633 8.6.855 0 5.633v26.51l16.2 9 16.2-9v-8.442l7.6-4.223V9.856l-8.6-4.777-8.6 4.777V18.3l-5.6 3.111V5.633ZM38 18.301l-5.6 3.11v-6.157l5.6-3.11V18.3Zm-1.06-7.856-5.54 3.078-5.54-3.079 5.54-3.078 5.54 3.079ZM24.8 18.3v-6.157l5.6 3.111v6.158L24.8 18.3Zm-1 1.732 5.54 3.078-13.14 7.302-5.54-3.078 13.14-7.3v-.002Zm-16.2 7.89 7.6 4.222V38.3L2 30.966V7.92l5.6 3.111v16.892ZM8.6 9.3 3.06 6.222 8.6 3.143l5.54 3.08L8.6 9.3Zm21.8 15.51-13.2 7.334V38.3l13.2-7.334v-6.156ZM9.6 11.034l5.6-3.11v14.6l-5.6 3.11v-14.6Z"
-    />
+{{-- Logo Jariyah: atap rumah + kubah masjid. Placeholder sampai logo resmi tersedia (docs/08). --}}
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 44" {{ $attributes }}>
+    <path fill="currentColor" d="M24 1 1 19.5l3.2 3.9L24 7.4l19.8 16 3.2-3.9L24 1Z" />
+    <path fill="currentColor" d="M9 24.6V43h11V33.5a4 4 0 0 1 8 0V43h11V24.6L24 12.5 9 24.6Z" opacity=".55" />
+    <path fill="currentColor" d="M24 17.5c-3.6 2-5.6 4.6-5.6 7.6h11.2c0-3-2-5.6-5.6-7.6Zm-.7-3.4h1.4v3h-1.4v-3ZM17.4 26.4h13.2V43h-2.6v-9.5a4 4 0 0 0-8 0V43h-2.6V26.4Z" />
 </svg>

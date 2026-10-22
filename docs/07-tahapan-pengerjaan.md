@@ -4,54 +4,57 @@
 
 ## Strategi eksekusi paralel
 
-Fase 0 dan 1 adalah **fondasi** dan dikerjakan berurutan oleh satu pelaksana. Hampir semua file lain bergantung padanya: layout, tema, model, enum, seeder, dan file rute per area.
-
-Setelah fondasi selesai, pekerjaan dibagi ke beberapa agen yang berjalan **paralel**. Masing-masing punya wilayah file sendiri supaya tidak bentrok.
+Fase 0 dan 1 adalah **fondasi** dan dikerjakan berurutan oleh satu pelaksana (sudah selesai). Setelah itu pekerjaan dibagi ke beberapa agen yang berjalan **paralel**. Setiap agen punya wilayah file sendiri, dan semua halaman sudah tersedia sebagai placeholder.
 
 | Gelombang | Agen | Wilayah file (milik eksklusif) |
 |---|---|---|
-| **G1** (paralel) | A · Halaman publik | `app/Livewire/Publik/*` (kecuali PetaWakaf & TanahDetail), `resources/views/livewire/publik/*`, `routes/publik.php` |
-| | B · Auth | Komponen/view auth dari starter kit, `x-layouts.auth`, `routes/auth.php`, logika login/registrasi |
-| | C · Peta | `app/Livewire/Shared/PetaWakaf.php`, `Publik/PetaWakaf`, `Publik/TanahDetail`, `PetaDataController`, `resources/js/peta.js` |
-| **G2** (paralel) | D · Area Nazir | `app/Livewire/Nazir/*`, view-nya, `routes/nazir.php` |
-| | E · Area Admin: pengajuan & data | `Admin/{Dashboard, TanahIndex, TanahForm, TanahImport, PengajuanIndex, PengajuanShow, Sertifikat, Peta}`, `Imports/*` |
-| | F · Admin: konten, pengguna, laporan | `Admin/Konten/*`, `Admin/{PenggunaIndex, PenggunaForm, PesanIndex, Laporan}`, `Exports/*`, `LaporanPdfController`, `views/pdf/*` |
+| **G1** (paralel) | A · Halaman publik | `resources/views/pages/publik/*` (kecuali `peta-wakaf`, `tanah-detail`), `UnduhanController`, `tests/Feature/Publik/*` |
+| | B · Auth | `resources/views/pages/auth/*`, `resources/views/layouts/auth/*`, `app/Actions/Fortify/*`, `app/Providers/FortifyServiceProvider.php`, `app/Concerns/*`, `config/fortify.php`, `tests/Feature/Auth/*` |
+| | C · Peta | `resources/js/peta.js`, `pages/publik/peta-wakaf`, `pages/publik/tanah-detail`, `PetaDataController`, komponen `resources/views/components/peta*.blade.php`, `tests/Feature/Peta/*` |
+| **G2** (paralel) | D · Area Nazir | `resources/views/pages/nazir/*`, `tests/Feature/Nazir/*` |
+| | E · Admin: data & pengajuan | `pages/admin/{dashboard, tanah/*, pengajuan/*, sertifikat, peta}`, `app/Imports/*`, `tests/Feature/Admin/{Tanah,Pengajuan}*` |
+| | F · Admin: konten, pengguna, laporan | `pages/admin/{konten/*, pengguna/*, laporan, pesan, aktivitas}`, `app/Exports/*`, `LaporanController`, `resources/views/pdf/*`, `resources/js/editor.js`, `tests/Feature/Admin/{Konten,Pengguna,Laporan}*` |
 | **G3** | Integrasi (satu pelaksana) | Test end-to-end, perbaikan lintas area, pemolesan |
 
 **Aturan untuk setiap agen:**
-1. Baca `docs/` lebih dulu. Dokumen ini adalah spesifikasi.
-2. **Jangan mengubah file fondasi** (model, enum, migrasi, layout, `PengajuanWorkflow`, `app.css`). Jika butuh perubahan, laporkan di hasil akhir agar pelaksana integrasi yang menerapkannya.
-3. Tulis test Pest untuk wilayahnya sendiri di `tests/Feature/{Area}/`.
-4. Pastikan `php artisan test --filter={Area}` lulus sebelum menyatakan selesai.
-5. Laporkan: file yang dibuat, test yang dijalankan, dan hal yang belum selesai.
-
-Pada G2, agen D dan E sama-sama memakai `PengajuanWorkflow`. Karena itu service tersebut dibuat lengkap di **Fase 1** (fondasi), beserta test-nya.
+1. Baca `docs/` lebih dulu (terutama 01, 02, 03, 05). Dokumen ini adalah spesifikasi.
+2. **Jangan mengubah file fondasi**:
+   - migrasi, model, enum, policy, `PengajuanWorkflow`, `StatistikWakaf`
+   - layout publik/app, komponen bersama, `app.css`, `app.js`
+   - file `routes/*`, seeder
+   
+   Jika perlu perubahan di file fondasi, laporkan di hasil akhir agar pelaksana integrasi yang menerapkannya.
+3. Tulis test PHPUnit untuk wilayahnya sendiri di `tests/Feature/{Area}/`.
+4. Pastikan `php artisan test` (seluruh suite) lulus sebelum menyatakan selesai.
+5. Jangan menjalankan `migrate:fresh` pada database MySQL saat agen lain bekerja, karena test memakai SQLite in-memory.
+6. Jangan commit. Pelaksana integrasi yang melakukan commit.
+7. Laporkan: file yang dibuat/diubah, test yang dijalankan, dan hal yang belum selesai.
 
 ---
 
 ## Fase 0 · Setup
-- [ ] `composer self-update` (2.4.4 → terbaru)
-- [ ] Buat proyek Laravel dengan starter kit Livewire + Pest di root proyek (folder `docs/` dipertahankan)
-- [ ] Buat database `jariyah_batanghari` di MySQL Laragon dan atur `.env` (`DB_*`, `APP_NAME="Jariyah Batang Hari"`, `APP_LOCALE=id`, `APP_TIMEZONE=Asia/Jakarta`)
-- [ ] `git init` + commit awal
-- [ ] Pasang paket composer: permission, activitylog, excel, dompdf
-- [ ] Pasang paket npm: leaflet, @geoman-io/leaflet-geoman-free, chart.js, trix
-- [ ] Atur file bahasa Indonesia (`lang/id`)
-- [ ] Token tema di `app.css` + font Poppins
-- [ ] `php artisan test` dan `npm run build` berhasil
+- [x] Composer Laragon diupdate ke 2.10.3 (Composer global butuh admin, jadi dipakai `php C:/laragon/bin/composer/composer.phar`)
+- [x] Proyek Laravel 13 + starter kit Livewire 4 (Fortify, Flux) di root proyek
+- [x] Database `jariyah_batanghari` di MySQL Laragon, `.env` (locale `id`, timezone `Asia/Jakarta`)
+- [x] `git init` + commit awal
+- [x] Paket composer: permission, activitylog, excel, dompdf, purifier, laravel-lang
+- [x] Paket npm: leaflet, geoman, chart.js, trix
+- [x] Bahasa Indonesia (`lang/id`, `lang/id.json`)
+- [x] Token tema di `app.css` + font Poppins, dark mode dimatikan
+- [x] `php artisan test` dan `npm run build` berhasil
 
-## Fase 1 · Fondasi (berurutan)
-- [ ] Migrasi semua tabel (lihat 04)
-- [ ] Enum di `app/Enums`
-- [ ] Model + relasi + cast + scope `forUser()` + `kolomPublik()`
-- [ ] Policy + registrasi role/permission (`RoleSeeder`)
-- [ ] `PengajuanWorkflow` + `StatistikWakaf` + notifikasi `StatusPengajuanBerubah`, beserta unit/feature test
-- [ ] Helper `setting()`
-- [ ] Factory semua model
-- [ ] Seeder: Wilayah (8 kecamatan + desa), Role, UserDemo (1 per role, KUA per kecamatan), Persyaratan (sesuai PDF), Konten (artikel, panduan, FAQ, pengaturan), TanahWakafDemo (±125 bidang dengan koordinat di dalam Batang Hari)
-- [ ] Layout `publik`, `dashboard`, `auth` + komponen bersama (`page-header`, `stat-card`, `badge-status`, ikon)
-- [ ] Rute dipecah: `publik.php`, `nazir.php`, `admin.php`, `auth.php`, dengan halaman placeholder
-- [ ] `php artisan migrate:fresh --seed` dan `php artisan test` lulus
+## Fase 1 · Fondasi
+- [x] Migrasi semua tabel (lihat 04)
+- [x] Enum di `app/Enums`
+- [x] Model + relasi + cast + scope `forUser()` + `dataPublik()`
+- [x] Policy + role/permission (`RoleSeeder`) + middleware alias + `PastikanAkunAktif`
+- [x] `PengajuanWorkflow` + `StatistikWakaf` + notifikasi `StatusPengajuanBerubah` & `PengajuanMasuk` (11 test)
+- [x] Helper `setting()`, `setting_list()`, `format_luas()`
+- [x] Factory semua model utama
+- [x] Seeder: Wilayah (8 kecamatan + desa contoh), Role, UserDemo, Persyaratan, Konten, TanahWakafDemo (125 bidang)
+- [x] Layout publik + dashboard (sidebar per role, lonceng notifikasi) + komponen bersama
+- [x] Rute per area + placeholder untuk semua halaman + smoke test akses (6 test)
+- [x] `migrate:fresh --seed` dan `php artisan test` lulus (48 test)
 
 ## Fase 2 · Halaman publik (G1-A)
 - [ ] Beranda
@@ -72,7 +75,7 @@ Pada G2, agen D dan E sama-sama memakai `PengajuanWorkflow`. Karena itu service 
 
 ## Fase 4 · Peta (G1-C)
 - [ ] Endpoint GeoJSON `/api/peta` + filter
-- [ ] Komponen `PetaWakaf`: toggle Peta/Satelit, marker berwarna, popup, polygon, legenda
+- [ ] Komponen `petaWakaf`: toggle Peta/Satelit, marker berwarna, popup, polygon, legenda
 - [ ] Halaman publik Peta Wakaf + panel filter & informasi
 - [ ] Detail tanah publik
 - [ ] Mode mini (dashboard) dan mode pilih lokasi + gambar polygon (wizard)
@@ -84,12 +87,10 @@ Pada G2, agen D dan E sama-sama memakai `PengajuanWorkflow`. Karena itu service 
 - [ ] Detail pengajuan + riwayat + perbaikan dokumen
 - [ ] Halaman Dokumen
 - [ ] Peta Saya
-- [ ] Profil
-- [ ] Notifikasi
 
 ## Fase 6 · Area Admin: data & pengajuan (G2-E)
 - [ ] Dashboard (kartu, grafik per kecamatan, peta mini)
-- [ ] Data Wakaf: CRUD + filter + impor Excel (template disediakan)
+- [ ] Data Wakaf: daftar + filter + tambah/ubah + impor Excel (template disediakan)
 - [ ] Daftar pengajuan + detail + validasi per dokumen
 - [ ] Aksi KUA: sahkan AIW / minta perbaikan / tolak
 - [ ] Aksi BPN: verifikasi / minta perbaikan / tolak / catat sertifikat terbit
@@ -100,6 +101,7 @@ Pada G2, agen D dan E sama-sama memakai `PengajuanWorkflow`. Karena itu service 
 - [ ] Kelola Konten: artikel (Trix), persyaratan, panduan, FAQ, unduhan, pengaturan
 - [ ] Kelola Pengguna: buat petugas BPN/KUA, nonaktifkan, reset password
 - [ ] Pesan Masuk
+- [ ] Log Aktivitas
 - [ ] Laporan: filter kecamatan/status/periode, tabel + grafik, ekspor Excel, ekspor PDF ber-kop
 
 ## Fase 8 · Integrasi & pemolesan (G3)

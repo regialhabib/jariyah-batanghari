@@ -1,15 +1,41 @@
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
+@import 'leaflet/dist/leaflet.css';
+@import 'trix/dist/trix.css';
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
 @source '../../vendor/livewire/flux/stubs/**/*.blade.php';
+@source '../../app/Enums';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+ * Token tema Jariyah Batang Hari (docs/05-arsitektur.md).
+ * Hijau tua = warna utama; dipakai juga sebagai warna aksen komponen Flux.
+ */
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-primary-50: #eef7f0;
+    --color-primary-100: #d6ecdb;
+    --color-primary-200: #afd9b9;
+    --color-primary-300: #7fbf8f;
+    --color-primary-400: #4fa266;
+    --color-primary-500: #2e8b4e;
+    --color-primary-600: #247a42;
+    --color-primary-700: #1f6b3a;
+    --color-primary-800: #1a5530;
+    --color-primary-900: #123f22;
+    --color-primary-950: #0a2614;
+
+    --color-daun: #8bc34a;
+    --color-krem: #f7f8f3;
+
+    --color-status-sudah: #2e8b4e;
+    --color-status-belum: #f59e0b;
+    --color-status-proses: #3b82f6;
 
     --color-zinc-50: #fafafa;
     --color-zinc-100: #f5f5f5;
@@ -23,17 +49,11 @@
     --color-zinc-900: #171717;
     --color-zinc-950: #0a0a0a;
 
-    --color-accent: var(--color-neutral-800);
-    --color-accent-content: var(--color-neutral-800);
+    --color-accent: var(--color-primary-700);
+    --color-accent-content: var(--color-primary-700);
     --color-accent-foreground: var(--color-white);
-}
 
-@layer theme {
-    .dark {
-        --color-accent: var(--color-white);
-        --color-accent-content: var(--color-white);
-        --color-accent-foreground: var(--color-neutral-800);
-    }
+    --shadow-kartu: 0 1px 2px rgb(18 63 34 / 0.04), 0 4px 16px rgb(18 63 34 / 0.06);
 }
 
 @layer base {
@@ -61,6 +81,32 @@ select:focus[data-flux-control] {
     @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
 }
 
-/* \[:where(&)\]:size-4 {
-    @apply size-4;
-} */
+/* Komponen dasar yang dipakai lintas halaman */
+@layer components {
+    .kartu {
+        @apply rounded-2xl border border-primary-100/70 bg-white shadow-kartu;
+    }
+
+    .btn-primary {
+        @apply inline-flex items-center justify-center gap-2 rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-700;
+    }
+
+    .btn-outline {
+        @apply inline-flex items-center justify-center gap-2 rounded-lg border border-primary-700 bg-white px-5 py-2.5 text-sm font-semibold text-primary-700 transition hover:bg-primary-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-700;
+    }
+
+    .konten-artikel {
+        @apply space-y-4 leading-relaxed text-zinc-700;
+
+        & ul { @apply list-disc space-y-1 ps-6; }
+        & ol { @apply list-decimal space-y-1 ps-6; }
+        & a { @apply text-primary-700 underline; }
+        & h2 { @apply text-xl font-semibold text-primary-900; }
+        & h3 { @apply text-lg font-semibold text-primary-900; }
+    }
+}
+
+/* Leaflet: popup mengikuti font & warna tema */
+.leaflet-container {
+    @apply font-sans;
+}

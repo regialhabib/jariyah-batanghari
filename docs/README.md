@@ -25,8 +25,8 @@ Folder ini adalah sumber kebenaran untuk rancangan, keputusan, dan progres proye
 
 | Topik | Keputusan |
 |---|---|
-| Framework | Laravel (versi stabil terbaru) |
-| Frontend | Blade + Livewire + Tailwind CSS v4 (starter kit Livewire resmi) |
+| Framework | Laravel 13 |
+| Frontend | Livewire 4 (single-file components) + Flux UI + Tailwind CSS v4, auth via Fortify |
 | Database | MySQL via Laragon, nama database `jariyah_batanghari` |
 | Registrasi publik | Hanya untuk **Nazir**. Akun BPN dan KUA dibuat oleh Admin BPN. |
 | Peran KUA | Memvalidasi dan mengesahkan **AIW** (tahap 1) di kecamatannya |
@@ -41,6 +41,6 @@ Folder ini adalah sumber kebenaran untuk rancangan, keputusan, dan progres proye
 | Komponen | Versi | Catatan |
 |---|---|---|
 | PHP | 8.4.26 | Ekstensi pdo_mysql, gd, zip, intl, fileinfo sudah tersedia |
-| Composer | 2.4.4 | **Perlu `composer self-update`** sebelum instal Laravel |
+| Composer | 2.10.3 (Laragon) | Pakai `php C:/laragon/bin/composer/composer.phar`, karena Composer global 2.4.4 butuh admin untuk update |
 | Node / npm | 24.12 / 11.6 | |
 | Server lokal | Laragon | MySQL dan virtual host |

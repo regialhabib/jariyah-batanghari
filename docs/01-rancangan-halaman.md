@@ -158,7 +158,7 @@ Di layar HP, menu berubah jadi hamburger dan tombol Login/Daftar masuk ke dalam 
 |---|---|---|
 | FAQ | `/faq` | Accordion tanya-jawab dari tabel `faqs` |
 | Detail Informasi Wakaf | `/informasi-wakaf/{slug}` | Isi artikel lengkap |
-| Daftar Nazir | `/nazir` | Nama Nazir + kecamatan + jumlah tanah yang dikelola, bisa difilter per kecamatan |
+| Daftar Nazir | `/daftar-nazir` | Nama Nazir + kecamatan + jumlah tanah yang dikelola, bisa difilter per kecamatan |
 | Detail Tanah Wakaf publik | `/peta-wakaf/{kode}` | Info publik satu bidang + peta kecil (tujuan tombol "Lihat Detail") |
 | Lupa / Reset Password | `/forgot-password`, `/reset-password/{token}` | Gaya sama dengan Login |
 | Verifikasi Email | `/verify-email` | Untuk Nazir baru |

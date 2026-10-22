@@ -1,7 +1,7 @@
 # 09 · Pengujian
 
-## Test otomatis (Pest)
-Jalankan dengan `php artisan test`. Test memakai database terpisah (SQLite in-memory atau `jariyah_batanghari_test`).
+## Test otomatis (PHPUnit)
+Jalankan dengan `php artisan test` (PHPUnit). Test memakai SQLite in-memory dan `withoutVite()`, jadi tidak butuh MySQL atau `npm run build`.
 
 | Area | Folder | Yang diuji |
 |---|---|---|
