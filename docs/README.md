@@ -18,6 +18,7 @@ Folder ini adalah sumber kebenaran untuk rancangan, keputusan, dan progres proye
 | [08-kebutuhan-data.md](08-kebutuhan-data.md) | Data dan aset yang perlu disiapkan pemilik proyek |
 | [09-pengujian.md](09-pengujian.md) | Strategi test otomatis dan skenario uji manual |
 | [10-deploy.md](10-deploy.md) | Pemasangan di server produksi, backup, pembaruan versi, daftar periksa go-live |
+| [akun-demo.md](akun-demo.md) | **Daftar akun untuk login** di lokal (semua role, password `password`) |
 | [komponen-peta.md](komponen-peta.md) | Kontrak komponen peta `<x-peta>` dan `<x-peta-pilih>` |
 | [CHANGELOG.md](CHANGELOG.md) | Catatan keputusan dan perubahan dari waktu ke waktu |
 

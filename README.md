@@ -51,6 +51,8 @@ Seeder demo hanya berjalan di luar `production`. Semua akun memakai password `pa
 | Petugas KUA | `kua.{kecamatan}@jariyah.test`, mis. `kua.muarabulian@jariyah.test` |
 | Nazir | `nazir@jariyah.test`, `nazir2@jariyah.test` |
 
+Daftar lengkap (username dan semua akun KUA): [docs/akun-demo.md](docs/akun-demo.md).
+
 Untuk mengisi ulang data demo dari awal: `php artisan migrate:fresh --seed` (menghapus semua data).
 
 ## Pengujian

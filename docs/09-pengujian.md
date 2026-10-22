@@ -26,6 +26,8 @@ Siapkan data dengan `php artisan migrate:fresh --seed`, lalu jalankan `composer 
 - `kua.muarabulian@jariyah.test` (dan satu akun KUA per kecamatan)
 - `nazir@jariyah.test`
 
+Daftar lengkapnya (username, semua akun KUA, Nazir kedua) ada di [akun-demo.md](akun-demo.md).
+
 **Skenario:**
 1. Buka semua halaman publik di desktop dan lebar HP (375 px), lalu bandingkan dengan mockup PDF.
 2. Daftar sebagai Nazir baru, verifikasi email (cek `storage/logs` atau Mailpit), lalu login. Hasilnya diarahkan ke dashboard Nazir.
