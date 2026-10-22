@@ -6,13 +6,16 @@ Jalankan dengan `php artisan test` (PHPUnit). Test memakai SQLite in-memory dan 
 | Area | Folder | Yang diuji |
 |---|---|---|
 | Fondasi | `tests/Unit`, `tests/Feature/Workflow` | Setiap transisi `PengajuanWorkflow`, sah dan tidak sah, beserta efek samping pada tanah; `StatusPengajuan::bisaKe()`; `StatistikWakaf`; penomoran pengajuan |
-| Akses | `tests/Feature/Akses` | Matriks rute × role (200/403/redirect); KUA tidak bisa memverifikasi sertifikat; KUA tidak bisa membuka data kecamatan lain; Nazir tidak bisa membuka pengajuan Nazir lain |
+| Akses | `tests/Feature/Akses` | Matriks rute × role (200/403/redirect); KUA tidak bisa memverifikasi sertifikat; KUA tidak bisa membuka data kecamatan lain; Nazir tidak bisa membuka pengajuan Nazir lain. `AuditRuteTest` mengambil daftar rute dari router: setiap rute `admin.*`/`nazir.*` wajib `auth`, `verified`, `role:`; tamu diarahkan ke login; Nazir 403 di semua rute admin dan petugas 403 di semua rute Nazir; dokumen privat; ekspor laporan per role |
+| End-to-end | `tests/Feature/EndToEnd` | Skenario uji manual langkah 2–8 (di bawah) dijalankan otomatis lewat halaman: registrasi → AIW → perbaikan → pengesahan KUA → sertifikat → verifikasi & terbit BPN → status di peta publik, statistik beranda, notifikasi Nazir |
 | Auth | `tests/Feature/Auth` | Login email & username; akun nonaktif ditolak; registrasi selalu `nazir` walau ada input `role`; NIK unik 16 digit; redirect per role |
 | Publik | `tests/Feature/Publik` | Semua halaman publik 200; statistik beranda benar; `/api/peta` tidak membocorkan NIK/HP; form kontak tersimpan + rate limit |
 | Nazir | `tests/Feature/Nazir` | Wizard membuat draf; tidak bisa kirim tanpa dokumen wajib; perbaikan dokumen |
 | Admin | `tests/Feature/Admin` | Aksi pemeriksaan; impor Excel; CRUD konten; buat petugas |
-| Dokumen | `tests/Feature/Dokumen` | Unduh dokumen privat oleh pemilik/petugas = 200, oleh orang lain = 403 |
-| Laporan | `tests/Feature/Laporan` | Ekspor Excel & PDF menghasilkan file dengan isi yang sesuai filter |
+| Laporan | `tests/Feature/Admin/LaporanTest.php` | Ekspor Excel & PDF menghasilkan file dengan isi yang sesuai filter |
+
+## Cek tampilan HP
+Semua halaman (publik, Nazir, admin, KUA) dibuka di lebar 375 px dengan Edge headless lewat `playwright-core`, lalu diperiksa: tidak ada scroll horizontal, tidak ada error konsol, dan status HTTP benar. Skrip ini alat bantu sekali jalan, bukan dependensi proyek. Ulangi setelah perubahan tampilan besar.
 
 ## Uji manual end-to-end
 Siapkan data dengan `php artisan migrate:fresh --seed`, lalu jalankan `composer run dev`.

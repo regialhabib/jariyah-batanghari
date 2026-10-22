@@ -2,12 +2,15 @@
 
 namespace App\Providers;
 
+use App\Http\Middleware\PastikanRole;
 use App\Support\HakAkses;
 use Carbon\CarbonImmutable;
+use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use Livewire\Livewire;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +30,12 @@ class AppServiceProvider extends ServiceProvider
         $this->configureDefaults();
 
         HakAkses::daftarkan();
+
+        // Middleware rute yang juga dijalankan ulang pada setiap request aksi Livewire (/livewire/update).
+        Livewire::addPersistentMiddleware([
+            PastikanRole::class,
+            EnsureEmailIsVerified::class,
+        ]);
     }
 
     /**

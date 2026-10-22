@@ -158,9 +158,9 @@ new #[Title('Dashboard')] class extends Component {
                     <table class="mt-3 w-full text-sm">
                         <thead>
                             <tr class="border-b border-primary-100 text-start text-xs uppercase tracking-wide text-zinc-500">
-                                <th class="py-2 pe-3 text-start font-medium">No</th>
+                                <th class="hidden py-2 pe-3 text-start font-medium sm:table-cell">No</th>
                                 <th class="py-2 pe-3 text-start font-medium">Nama Tanah Wakaf</th>
-                                <th class="py-2 pe-3 text-start font-medium">Lokasi</th>
+                                <th class="hidden py-2 pe-3 text-start font-medium sm:table-cell">Lokasi</th>
                                 <th class="py-2 pe-3 text-start font-medium">Status</th>
                                 <th class="py-2 text-end font-medium">Aksi</th>
                             </tr>
@@ -168,12 +168,13 @@ new #[Title('Dashboard')] class extends Component {
                         <tbody class="divide-y divide-primary-50">
                             @foreach ($this->terbaru as $p)
                                 <tr wire:key="terbaru-{{ $p->id }}" @class(['bg-amber-50/60' => $p->status === \App\Enums\StatusPengajuan::PerluPerbaikan])>
-                                    <td class="py-3 pe-3 text-zinc-500">{{ $loop->iteration }}</td>
+                                    <td class="hidden py-3 pe-3 text-zinc-500 sm:table-cell">{{ $loop->iteration }}</td>
                                     <td class="py-3 pe-3">
                                         <p class="font-medium text-primary-900">{{ $p->tanahWakaf?->nama }}</p>
                                         <p class="text-xs text-zinc-500">{{ $p->nomor ?? 'Draf' }} · {{ $p->jenis->labelSingkat() }}</p>
+                                        <p class="text-xs text-zinc-500 sm:hidden">{{ $p->tanahWakaf?->desa?->kecamatan?->nama }}</p>
                                     </td>
-                                    <td class="py-3 pe-3 text-zinc-600">{{ $p->tanahWakaf?->desa?->nama }}, {{ $p->tanahWakaf?->desa?->kecamatan?->nama }}</td>
+                                    <td class="hidden py-3 pe-3 text-zinc-600 sm:table-cell">{{ $p->tanahWakaf?->desa?->nama }}, {{ $p->tanahWakaf?->desa?->kecamatan?->nama }}</td>
                                     <td class="py-3 pe-3"><x-badge-status :status="$p->status" /></td>
                                     <td class="py-3 text-end">
                                         <flux:button size="sm" variant="ghost" :href="route('nazir.pengajuan.show', $p)" wire:navigate>Detail</flux:button>

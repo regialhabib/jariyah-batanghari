@@ -2,6 +2,11 @@
 
 Format: tanggal, apa yang diputuskan atau diubah, dan alasannya. Entri terbaru di atas.
 
+## 2026-10-22 (Fase 8: audit akses & end-to-end)
+- **`PastikanRole` dan `verified` didaftarkan sebagai persistent middleware Livewire** (`AppServiceProvider`). *Alasan:* aksi Livewire dikirim ke `/livewire/update`, bukan ke rute halaman, sehingga middleware buatan sendiri tidak ikut dijalankan ulang. Sebelumnya pembatas role hanya berlaku saat halaman dibuka; aksi tetap aman karena dicek Policy/`can:`, tetapi kini dibatasi di dua lapis.
+- **Audit akses otomatis** (`tests/Feature/Akses/AuditRuteTest.php`) membaca daftar rute dari router, jadi rute baru yang lupa diberi pengaman langsung gagal di test.
+- **Skenario uji manual end-to-end kini juga berjalan sebagai test** (`tests/Feature/EndToEnd`).
+
 ## 2026-10-22 (spatie/laravel-permission dihapus)
 - **Role cukup satu kolom `users.role`** (enum `Role`), menggantikan spatie/laravel-permission. *Alasan:* rolenya hanya 4 dan tetap, setiap akun satu role, dan daftar hak tidak pernah diubah lewat UI. Paket itu menambah 5 tabel dan cache tanpa manfaat. Aturan berbasis data tetap di Policy.
 - **Hak akses** (`laporan.ekspor`, `konten.kelola`, dst.) didaftarkan sebagai Gate di `App\Support\HakAkses`. Semua pemakaian `can(...)`/`@can` tetap sama; middleware rute `permission:` diganti `can:`.

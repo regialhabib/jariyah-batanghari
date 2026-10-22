@@ -89,13 +89,13 @@ Fase 0 dan 1 adalah **fondasi** dan dikerjakan berurutan oleh satu pelaksana (su
 - [x] Peta Saya
 
 ## Fase 6 · Area Admin: data & pengajuan (G2-E)
-- [ ] Dashboard (kartu, grafik per kecamatan, peta mini)
-- [ ] Data Wakaf: daftar + filter + tambah/ubah + impor Excel (template disediakan)
-- [ ] Daftar pengajuan + detail + validasi per dokumen
-- [ ] Aksi KUA: sahkan AIW / minta perbaikan / tolak
-- [ ] Aksi BPN: verifikasi / minta perbaikan / tolak / catat sertifikat terbit
-- [ ] Halaman Sertifikat
-- [ ] Peta admin
+- [x] Dashboard (kartu, grafik per kecamatan, peta mini)
+- [x] Data Wakaf: daftar + filter + tambah/ubah + impor Excel (template disediakan)
+- [x] Daftar pengajuan + detail + validasi per dokumen
+- [x] Aksi KUA: sahkan AIW / minta perbaikan / tolak
+- [x] Aksi BPN: verifikasi / minta perbaikan / tolak / catat sertifikat terbit
+- [x] Halaman Sertifikat
+- [x] Peta admin
 
 ## Fase 7 · Konten, pengguna, laporan (G2-F)
 - [x] Kelola Konten: artikel (Trix), persyaratan, panduan, FAQ, unduhan, pengaturan
@@ -105,9 +105,9 @@ Fase 0 dan 1 adalah **fondasi** dan dikerjakan berurutan oleh satu pelaksana (su
 - [x] Laporan: filter kecamatan/status/periode, tabel + grafik, ekspor Excel, ekspor PDF ber-kop
 
 ## Fase 8 · Integrasi & pemolesan (G3)
-- [ ] Skenario end-to-end (lihat 09) lulus
-- [ ] Audit akses semua rute per role
-- [ ] Tampilan HP semua halaman
+- [x] Skenario end-to-end (lihat 09) lulus — otomatis di `tests/Feature/EndToEnd`
+- [x] Audit akses semua rute per role — `tests/Feature/Akses/AuditRuteTest.php` + persistent middleware Livewire
+- [x] Tampilan HP semua halaman (46 halaman di 375 px: tanpa scroll horizontal, tanpa error konsol)
 - [x] Halaman error 403/404/419/429/500/503
 - [x] Meta title/description, favicon, robots.txt
 - [x] README proyek (cara install & menjalankan)
