@@ -9,7 +9,7 @@ Pengembangan memakai **data contoh/placeholder** lebih dulu. Daftar di bawah per
 | 3 | Daftar desa/kelurahan per kecamatan (+ kode Kemendagri) | Excel/CSV | Seeder wilayah | Belum ada, sementara pakai daftar contoh |
 | 4 | Batas wilayah Kabupaten Batang Hari | GeoJSON (disederhanakan), simpan di `public/geo/batang-hari.geojson` | Garis batas di peta (otomatis tampil bila file ada) | Belum ada |
 | 5 | Data tanah wakaf yang sudah ada (±125 bidang) | Excel sesuai template impor | Impor data awal | Belum ada |
-| 6 | Kontak resmi: alamat, telepon, email, jam operasional | Teks | Footer, Kontak | Belum ada (di mockup: Jl. Jend. Sudirman, Muara Bulian) |
+| 6 | Kontak resmi: alamat, telepon, email, jam operasional | Teks | Footer, Kontak | Sementara memakai data mockup halaman Kontak (PDF hlm. 5): Jl. Jend. Sudirman No. 123, Muara Bulian, Jambi 36613; (0743) 21045; kab-batanghari@atrbpn.go.id; Senin – Jumat 08.00 – 16.00 WIB. Perlu dikonfirmasi ke kantor sebelum tayang (footer mockup memakai isian contoh yang berbeda) |
 | 7 | Isi artikel Informasi Wakaf (7 topik) | Teks | Informasi Wakaf | Pakai draf awal, perlu ditinjau |
 | 8 | Daftar FAQ | Teks | FAQ | Pakai draf awal, perlu ditinjau |
 | 9 | Template formulir: Formulir Permohonan, Contoh AIW, Contoh Surat Kuasa, Contoh Surat Pernyataan, Brosur | PDF/DOCX | Persyaratan, Panduan | Belum ada |

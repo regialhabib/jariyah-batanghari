@@ -97,7 +97,7 @@ class KontenSeeder extends Seeder
     {
         $data = [
             'kontak' => [
-                'alamat' => 'Kantor Pertanahan Kabupaten Batang Hari, Jl. Jend. Sudirman, Muara Bulian, Kabupaten Batang Hari, Jambi',
+                'alamat' => 'Kantor Pertanahan Kabupaten Batang Hari, Jl. Jend. Sudirman No. 123, Muara Bulian, Kabupaten Batang Hari, Jambi 36613',
                 'telepon' => '(0743) 21045',
                 'email' => 'kab-batanghari@atrbpn.go.id',
                 'jam_operasional' => 'Senin – Jumat (08.00 – 16.00 WIB)',
