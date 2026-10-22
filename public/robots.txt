@@ -1,2 +1,6 @@
 User-agent: *
-Disallow:
+Disallow: /admin
+Disallow: /nazir
+Disallow: /settings
+Disallow: /dokumen
+Disallow: /api
