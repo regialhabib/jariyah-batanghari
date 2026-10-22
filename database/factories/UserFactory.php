@@ -56,7 +56,8 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'nik' => fake()->unique()->numerify('1504############'),
             'phone' => fake()->numerify('08##########'),
-        ])->afterCreating(fn (User $user) => $user->assignRole(Role::Nazir->value));
+            'role' => Role::Nazir,
+        ]);
     }
 
     public function kua(?Kecamatan $kecamatan = null): static
@@ -64,18 +65,17 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'username' => fake()->unique()->userName(),
             'kecamatan_id' => $kecamatan?->id ?? Kecamatan::factory(),
-        ])->afterCreating(fn (User $user) => $user->assignRole(Role::Kua->value));
+            'role' => Role::Kua,
+        ]);
     }
 
     public function bpn(): static
     {
-        return $this->state(fn (array $attributes) => ['username' => fake()->unique()->userName()])
-            ->afterCreating(fn (User $user) => $user->assignRole(Role::Bpn->value));
+        return $this->state(fn (array $attributes) => ['username' => fake()->unique()->userName(), 'role' => Role::Bpn]);
     }
 
     public function admin(): static
     {
-        return $this->state(fn (array $attributes) => ['username' => fake()->unique()->userName()])
-            ->afterCreating(fn (User $user) => $user->assignRole(Role::AdminBpn->value));
+        return $this->state(fn (array $attributes) => ['username' => fake()->unique()->userName(), 'role' => Role::AdminBpn]);
     }
 }

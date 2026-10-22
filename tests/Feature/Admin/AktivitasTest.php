@@ -4,7 +4,6 @@ namespace Tests\Feature\Admin;
 
 use App\Models\TanahWakaf;
 use App\Models\User;
-use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -15,13 +14,6 @@ use Tests\TestCase;
 class AktivitasTest extends TestCase
 {
     use RefreshDatabase;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->seed(RoleSeeder::class);
-    }
 
     public function test_hanya_admin_yang_bisa_melihat_log(): void
     {

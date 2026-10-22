@@ -9,7 +9,6 @@ use App\Models\Kecamatan;
 use App\Models\Pengajuan;
 use App\Models\TanahWakaf;
 use App\Models\User;
-use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -28,7 +27,6 @@ class DashboardAdminTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed(RoleSeeder::class);
         $kecamatan = Kecamatan::factory()->create();
         $this->desa = Desa::factory()->for($kecamatan)->create();
         $this->kua = User::factory()->kua($kecamatan)->create();

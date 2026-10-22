@@ -14,17 +14,19 @@ Ketentuan:
 - Akun yang `is_active = false` tidak bisa login. Admin bisa menonaktifkan akun petugas maupun Nazir.
 
 ## Implementasi
-- **Paket:** `spatie/laravel-permission` untuk role dan permission.
+- **Tanpa paket tambahan.** Role disimpan di kolom `users.role` (cast ke enum `App\Enums\Role`). Setiap akun hanya punya satu role.
+- **Hak akses** di tabel bawah didaftarkan sebagai Gate oleh `App\Support\HakAkses` (dipanggil dari `AppServiceProvider`). Cara pakainya: `$user->can('laporan.ekspor')`, `@can('konten.kelola')`, atau middleware `can:pengguna.kelola`.
 - **Middleware rute:**
   - `/nazir/*` memakai `auth`, `verified`, `role:nazir`
   - `/admin/*` memakai `auth`, `role:admin_bpn|bpn|kua`
+  - `role:` adalah middleware `App\Http\Middleware\PastikanRole`. Rute admin tertentu ditambah `can:<hak>`.
 - **Policy per model** untuk aturan berbasis data: `TanahWakafPolicy`, `PengajuanPolicy`, `PengajuanDokumenPolicy`, `UserPolicy`.
 - **Cakupan KUA:** query scope `forUser($user)` di model `TanahWakaf` dan `Pengajuan`. Untuk KUA, scope ini memfilter `desa.kecamatan_id = user.kecamatan_id`. Untuk Nazir, scope memfilter `nazir_id = user.id`.
 - **Redirect setelah login:** `nazir` diarahkan ke `/nazir/dashboard`, role lainnya ke `/admin/dashboard`.
 
-## Daftar permission
+## Daftar hak akses (`App\Support\HakAkses::DAFTAR`)
 
-| Permission | admin_bpn | bpn | kua | nazir |
+| Hak | admin_bpn | bpn | kua | nazir |
 |---|:-:|:-:|:-:|:-:|
 | `dashboard.admin` | ✔ | ✔ | ✔ | |
 | `tanah.lihat-semua` | ✔ | ✔ | (kecamatannya) | |

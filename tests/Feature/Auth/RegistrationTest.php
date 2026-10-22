@@ -4,7 +4,6 @@ namespace Tests\Feature\Auth;
 
 use App\Enums\Role;
 use App\Models\User;
-use Database\Seeders\RoleSeeder;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
@@ -22,7 +21,6 @@ class RegistrationTest extends TestCase
 
         $this->skipUnlessFortifyHas(Features::registration());
 
-        $this->seed(RoleSeeder::class);
     }
 
     /**
@@ -102,7 +100,7 @@ class RegistrationTest extends TestCase
 
         $user = User::where('email', 'nazir@example.com')->firstOrFail();
 
-        $this->assertSame([Role::Nazir->value], $user->getRoleNames()->all());
+        $this->assertSame(Role::Nazir, $user->role);
         $this->assertFalse($user->hasRole(Role::AdminBpn->value));
         $this->assertTrue($user->is_active);
         $this->assertNull($user->kecamatan_id);

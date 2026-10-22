@@ -11,7 +11,7 @@ Sistem informasi pengelolaan dan pemantauan tanah wakaf untuk Kantor Pertanahan 
 Dokumentasi lengkap (rancangan, alur, model data, keamanan, pengujian) ada di [`docs/`](docs/README.md).
 
 ## Teknologi
-Laravel 13 · Livewire 4 (single-file components) · Flux UI · Tailwind CSS v4 · MySQL · Leaflet + Geoman · Chart.js · Trix · spatie/laravel-permission · spatie/laravel-activitylog · maatwebsite/excel · barryvdh/laravel-dompdf
+Laravel 13 · Livewire 4 (single-file components) · Flux UI · Tailwind CSS v4 · MySQL · Leaflet + Geoman · Chart.js · Trix · spatie/laravel-activitylog · maatwebsite/excel · barryvdh/laravel-dompdf
 
 ## Kebutuhan
 - PHP 8.3+ dengan ekstensi `pdo_mysql`, `gd`, `zip`, `intl`, `fileinfo`

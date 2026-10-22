@@ -56,7 +56,7 @@ new #[Title('Form Pengguna')] class extends Component {
             $this->username = (string) $user->username;
             $this->email = $user->email;
             $this->phone = (string) $user->phone;
-            $this->role = $user->peran()?->value ?? 'bpn';
+            $this->role = $user->role->value ?? 'bpn';
             $this->kecamatan_id = (string) ($user->kecamatan_id ?? '');
             $this->is_active = $user->is_active;
         }
@@ -130,7 +130,7 @@ new #[Title('Form Pengguna')] class extends Component {
         if ($user) {
             $this->modeNazir = $user->isNazir();
             if ($this->akunSendiri()) {
-                $this->role = $user->peran()?->value ?? $this->role; // admin tidak bisa mengubah role sendiri
+                $this->role = $user->role->value ?? $this->role; // admin tidak bisa mengubah role sendiri
                 $this->is_active = true;                            // dan tidak bisa menonaktifkan diri
             }
         }
@@ -155,9 +155,10 @@ new #[Title('Form Pengguna')] class extends Component {
             ]);
 
             if (! $this->modeNazir) {
-                $roleLama = $user->exists ? $user->peran()?->value : null;
+                $roleLama = $user->exists ? $user->role->value : null;
 
                 $user->username = $data['username'];
+                $user->role = Role::from($data['role']);
                 $user->kecamatan_id = $data['role'] === Role::Kua->value ? (int) $data['kecamatan_id'] : null;
                 if (filled($data['password'] ?? null)) {
                     $user->password = $data['password'];
@@ -165,7 +166,6 @@ new #[Title('Form Pengguna')] class extends Component {
                 // Akun petugas dibuat oleh admin: email dianggap terverifikasi.
                 $user->email_verified_at ??= now();
                 $user->save();
-                $user->syncRoles([$data['role']]);
 
                 if ($roleLama !== $data['role']) {
                     activity('pengguna')->performedOn($user)

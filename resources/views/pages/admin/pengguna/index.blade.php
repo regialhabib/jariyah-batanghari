@@ -52,7 +52,7 @@ new #[Title('Pengguna')] class extends Component {
         $role = Role::tryFrom($this->role);
 
         return User::query()
-            ->with(['roles', 'kecamatan'])
+            ->with('kecamatan')
             ->when(trim($this->cari) !== '', function (Builder $q) {
                 $kata = '%'.trim($this->cari).'%';
                 $q->where(fn (Builder $w) => $w->where('name', 'like', $kata)->orWhere('email', 'like', $kata)->orWhere('username', 'like', $kata));

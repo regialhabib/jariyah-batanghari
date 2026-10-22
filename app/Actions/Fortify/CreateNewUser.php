@@ -36,7 +36,8 @@ class CreateNewUser implements CreatesNewUsers
         ], $this->profileAttributes())->validate();
 
         return DB::transaction(function () use ($data): User {
-            $user = User::create([
+            // Registrasi publik selalu menjadi Nazir; `role` tidak fillable sehingga tidak bisa disuntik.
+            $user = new User([
                 'name' => $data['name'],
                 'nik' => $data['nik'],
                 'email' => $data['email'],
@@ -44,8 +45,8 @@ class CreateNewUser implements CreatesNewUsers
                 'password' => $data['password'],
                 'is_active' => true,
             ]);
-
-            $user->assignRole(Role::Nazir->value);
+            $user->role = Role::Nazir;
+            $user->save();
 
             return $user;
         });

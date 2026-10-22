@@ -15,7 +15,6 @@ use App\Models\TanahWakaf;
 use App\Models\User;
 use App\Services\PengajuanWorkflow;
 use Database\Seeders\PersyaratanSeeder;
-use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Notification;
@@ -39,7 +38,7 @@ class AreaNazirTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed([RoleSeeder::class, PersyaratanSeeder::class]);
+        $this->seed([PersyaratanSeeder::class]);
         Storage::fake('local');
         Notification::fake();
 

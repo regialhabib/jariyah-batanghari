@@ -35,6 +35,7 @@ pengajuans 1─* riwayat_pengajuans *─1 users
 |---|---|---|
 | name | string | |
 | username | string unique nullable | Untuk login petugas |
+| role | string(20) index, default `nazir` | Enum `Role`: `admin_bpn`, `bpn`, `kua`, `nazir`. Tidak fillable, diisi eksplisit |
 | nik | char(16) unique nullable | Wajib untuk Nazir |
 | email | string unique | |
 | phone | string(20) nullable | |
@@ -43,7 +44,7 @@ pengajuans 1─* riwayat_pengajuans *─1 users
 | is_active | boolean default true | |
 | email_verified_at, remember_token | | Bawaan |
 
-Role disimpan oleh spatie/laravel-permission (`roles`, `model_has_roles`, dan seterusnya).
+Role cukup satu kolom karena setiap akun hanya punya satu role dan daftar hak tidak diubah lewat UI (lihat 02).
 
 ## Tanah wakaf
 
@@ -150,7 +151,6 @@ Kolom: `nama`, `kontak` (email/HP), `isi`, `ip`, `dibaca_at` nullable.
 ## Bawaan / paket
 - `notifications`: notifikasi database Laravel
 - `activity_log`: spatie/laravel-activitylog
-- Tabel spatie/laravel-permission
 - `sessions`, `cache`, `jobs`: bawaan Laravel
 
 ## Enum PHP (`app/Enums`)

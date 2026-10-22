@@ -5,7 +5,6 @@ namespace Tests\Feature\Admin;
 use App\Enums\Role;
 use App\Models\Kecamatan;
 use App\Models\User;
-use Database\Seeders\RoleSeeder;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
@@ -26,7 +25,6 @@ class PenggunaTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed(RoleSeeder::class);
         $this->admin = User::factory()->admin()->create(['name' => 'Admin Utama']);
     }
 

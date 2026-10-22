@@ -41,8 +41,7 @@ class UserDemoSeeder extends Seeder
             ...$tambahan,
         ]);
 
-        $user->forceFill(['email_verified_at' => now()])->save();
-        $user->syncRoles([$role->value]);
+        $user->forceFill(['email_verified_at' => now(), 'role' => $role])->save();
 
         return $user;
     }

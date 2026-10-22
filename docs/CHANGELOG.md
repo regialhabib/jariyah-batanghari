@@ -2,6 +2,14 @@
 
 Format: tanggal, apa yang diputuskan atau diubah, dan alasannya. Entri terbaru di atas.
 
+## 2026-10-22 (spatie/laravel-permission dihapus)
+- **Role cukup satu kolom `users.role`** (enum `Role`), menggantikan spatie/laravel-permission. *Alasan:* rolenya hanya 4 dan tetap, setiap akun satu role, dan daftar hak tidak pernah diubah lewat UI. Paket itu menambah 5 tabel dan cache tanpa manfaat. Aturan berbasis data tetap di Policy.
+- **Hak akses** (`laporan.ekspor`, `konten.kelola`, dst.) didaftarkan sebagai Gate di `App\Support\HakAkses`. Semua pemakaian `can(...)`/`@can` tetap sama; middleware rute `permission:` diganti `can:`.
+- **Middleware `role:`** kini `App\Http\Middleware\PastikanRole` (sintaks sama: `role:admin_bpn|bpn|kua`).
+- **`role` tidak fillable**, jadi tidak bisa disuntik lewat form registrasi atau profil. Registrasi mengisinya eksplisit sebagai `nazir`.
+- **`RoleSeeder` dan migrasi tabel permission dihapus.** Kolom `role` ditambahkan langsung di migrasi kolom Jariyah pada `users`, karena aplikasi belum pernah dideploy. Database lokal perlu `php artisan migrate:fresh --seed`.
+- **Jumlah tabel** turun dari 28 menjadi 23 (ditambah tabel `migrations`).
+
 ## 2026-10-22 (Fase 5 & 7 selesai)
 - **Area Nazir:** wizard AIW (jenis → data tanah → lokasi → ringkasan) dan wizard sertifikat (pilih tanah yang memenuhi syarat). Dokumen diunggah di halaman detail pengajuan dan langsung tersimpan saat dipilih. Saat `perlu_perbaikan`, hanya dokumen `tidak_valid` atau yang belum ada yang bisa diganti; aturan ini ditegakkan di UI dan server.
 - **Hapus draf dan ubah data tanah AIW dipindah ke `PengajuanWorkflow`** (`hapusDraf`, `ubahDataTanah`), supaya aturan bisnis tidak tersebar di komponen.

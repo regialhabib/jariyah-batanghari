@@ -11,7 +11,6 @@ use App\Models\PengajuanDokumen;
 use App\Models\Persyaratan;
 use App\Models\Unduhan;
 use App\Models\User;
-use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -31,7 +30,6 @@ class KontenTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed(RoleSeeder::class);
         $this->admin = User::factory()->admin()->create();
     }
 

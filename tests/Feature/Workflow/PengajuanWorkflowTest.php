@@ -16,7 +16,6 @@ use App\Notifications\PengajuanMasuk;
 use App\Notifications\StatusPengajuanBerubah;
 use App\Services\PengajuanWorkflow;
 use Database\Seeders\PersyaratanSeeder;
-use Database\Seeders\RoleSeeder;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -45,7 +44,7 @@ class PengajuanWorkflowTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed([RoleSeeder::class, PersyaratanSeeder::class]);
+        $this->seed([PersyaratanSeeder::class]);
         Storage::fake('local');
         Notification::fake();
 

@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,12 +17,12 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
-use Spatie\Permission\Traits\HasRoles;
 
 /**
  * @property int $id
  * @property string $name
  * @property string|null $username
+ * @property Role $role
  * @property string|null $nik
  * @property string $email
  * @property string|null $phone
@@ -39,7 +40,14 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, HasRoles, LogsActivity, Notifiable;
+    use HasFactory, LogsActivity, Notifiable;
+
+    /**
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'role' => 'nazir',
+    ];
 
     /**
      * Get the attributes that should be cast.
@@ -52,13 +60,14 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => 'boolean',
+            'role' => Role::class,
         ];
     }
 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['name', 'username', 'email', 'phone', 'kecamatan_id', 'is_active'])
+            ->logOnly(['name', 'username', 'role', 'email', 'phone', 'kecamatan_id', 'is_active'])
             ->logOnlyDirty()
             ->dontLogEmptyChanges()
             ->useLogName('pengguna');
@@ -101,38 +110,49 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Role utama pengguna (setiap akun hanya punya satu role).
+     * Role pengguna. Setiap akun hanya punya satu role, disimpan di kolom `users.role`.
      */
-    public function peran(): ?Role
+    public function peran(): Role
     {
-        $nama = $this->getRoleNames()->first();
+        return $this->role;
+    }
 
-        return $nama ? Role::tryFrom($nama) : null;
+    public function hasRole(Role|string ...$roles): bool
+    {
+        return in_array($this->role, array_map(fn (Role|string $r) => $r instanceof Role ? $r : Role::from($r), $roles), true);
     }
 
     public function isNazir(): bool
     {
-        return $this->hasRole(Role::Nazir->value);
+        return $this->role === Role::Nazir;
     }
 
     public function isKua(): bool
     {
-        return $this->hasRole(Role::Kua->value);
+        return $this->role === Role::Kua;
     }
 
     public function isBpn(): bool
     {
-        return $this->hasAnyRole(array_map(fn (Role $r) => $r->value, Role::bpn()));
+        return $this->hasRole(...Role::bpn());
     }
 
     public function isAdmin(): bool
     {
-        return $this->hasRole(Role::AdminBpn->value);
+        return $this->role === Role::AdminBpn;
     }
 
     public function isPetugas(): bool
     {
-        return $this->hasAnyRole(array_map(fn (Role $r) => $r->value, Role::petugas()));
+        return $this->hasRole(...Role::petugas());
+    }
+
+    /**
+     * @param  Role|string|array<int, Role|string>  $roles
+     */
+    public function scopeRole(Builder $query, Role|string|array $roles): void
+    {
+        $query->whereIn('role', array_map(fn (Role|string $r) => $r instanceof Role ? $r->value : $r, (array) $roles));
     }
 
     /**

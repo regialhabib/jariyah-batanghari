@@ -19,7 +19,7 @@
 
 | Kebutuhan | Paket |
 |---|---|
-| Role/permission | `spatie/laravel-permission` v8 |
+| Role/hak akses | Kolom `users.role` + Gate Laravel (`App\Support\HakAkses`), tanpa paket |
 | Audit log | `spatie/laravel-activitylog` v5 (namespace `Spatie\Activitylog\Models\Concerns\LogsActivity`, `Spatie\Activitylog\Support\LogOptions`, method `dontLogEmptyChanges()`) |
 | Ekspor/impor Excel | `maatwebsite/excel` v4 |
 | PDF laporan | `barryvdh/laravel-dompdf` v3 |
@@ -49,7 +49,8 @@ app/
   Notifications/  StatusPengajuanBerubah (ke Nazir), PengajuanMasuk (ke pemeriksa)
   Http/Controllers/  DokumenController (unduh privat), PetaDataController (GeoJSON publik),
                      UnduhanController (formulir publik), LaporanController (Excel/PDF)
-  Http/Middleware/   PastikanAkunAktif (mengeluarkan akun nonaktif)
+  Http/Middleware/   PastikanAkunAktif (mengeluarkan akun nonaktif), PastikanRole (alias `role:`)
+  Support/        HakAkses (daftar hak per role → Gate), FilterLaporan (filter laporan bersama)
   Exports/ Imports/  (dibuat di Fase 6–7)
   helpers.php     setting(), setting_list(), format_luas()
 resources/

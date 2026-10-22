@@ -41,7 +41,7 @@ SESSION_SECURE_COOKIE=true
 Lalu:
 ```bash
 php artisan migrate --force
-php artisan db:seed --force          # di production hanya mengisi data dasar: wilayah, role, persyaratan, konten awal
+php artisan db:seed --force          # di production hanya mengisi data dasar: wilayah, persyaratan, konten awal
 php artisan storage:link
 npm ci && npm run build              # atau unggah public/build hasil build
 php artisan optimize                 # cache config, route, view, event
@@ -52,8 +52,9 @@ Seeder akun demo tidak berjalan di production. Buat admin pertama lewat tinker:
 ```bash
 php artisan tinker
 >>> $u = App\Models\User::create(['name' => 'Admin BPN', 'username' => 'admin', 'email' => 'admin@domain-anda', 'password' => 'ganti-password-kuat', 'is_active' => true]);
+>>> $u->role = App\Enums\Role::AdminBpn;
+>>> $u->save();
 >>> $u->markEmailAsVerified();
->>> $u->assignRole('admin_bpn');
 ```
 Setelah itu akun petugas BPN dan KUA dibuat dari menu **Pengguna**.
 

@@ -8,7 +8,6 @@ use App\Models\Desa;
 use App\Models\Kecamatan;
 use App\Models\TanahWakaf;
 use App\Models\User;
-use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -27,7 +26,6 @@ class TanahAdminTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed(RoleSeeder::class);
         $this->kecamatan = Kecamatan::factory()->create(['nama' => 'Muara Bulian']);
         $this->desa = Desa::factory()->for($this->kecamatan)->create(['nama' => 'Rengas Condong']);
     }

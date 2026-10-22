@@ -11,7 +11,6 @@ use App\Models\Unduhan;
 use App\Models\User;
 use Database\Seeders\KontenSeeder;
 use Database\Seeders\PersyaratanSeeder;
-use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -28,7 +27,7 @@ class HalamanPublikTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed([RoleSeeder::class, KontenSeeder::class, PersyaratanSeeder::class]);
+        $this->seed([KontenSeeder::class, PersyaratanSeeder::class]);
     }
 
     public function test_beranda_menampilkan_hero_dan_kartu_statistik(): void

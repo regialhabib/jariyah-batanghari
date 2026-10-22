@@ -47,7 +47,7 @@ Fase 0 dan 1 adalah **fondasi** dan dikerjakan berurutan oleh satu pelaksana (su
 - [x] Migrasi semua tabel (lihat 04)
 - [x] Enum di `app/Enums`
 - [x] Model + relasi + cast + scope `forUser()` + `dataPublik()`
-- [x] Policy + role/permission (`RoleSeeder`) + middleware alias + `PastikanAkunAktif`
+- [x] Policy + role (kolom `users.role`) + hak akses Gate (`HakAkses`) + middleware `role:` + `PastikanAkunAktif`
 - [x] `PengajuanWorkflow` + `StatistikWakaf` + notifikasi `StatusPengajuanBerubah` & `PengajuanMasuk` (11 test)
 - [x] Helper `setting()`, `setting_list()`, `format_luas()`
 - [x] Factory semua model utama

@@ -3,7 +3,6 @@
 namespace Tests\Feature\Settings;
 
 use App\Models\User;
-use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -11,13 +10,6 @@ use Tests\TestCase;
 class ProfileUpdateTest extends TestCase
 {
     use RefreshDatabase;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->seed(RoleSeeder::class);
-    }
 
     public function test_profile_page_is_displayed(): void
     {

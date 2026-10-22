@@ -8,7 +8,6 @@ use App\Models\Desa;
 use App\Models\Kecamatan;
 use App\Models\TanahWakaf;
 use App\Models\User;
-use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -45,7 +44,6 @@ class PetaDataTest extends TestCase
 
     public function test_properti_tidak_memuat_data_pribadi(): void
     {
-        $this->seed(RoleSeeder::class);
         $nazir = User::factory()->nazir()->create(['phone' => '081234567890', 'email' => 'nazir.rahasia@example.com']);
         TanahWakaf::factory()->milik($nazir)->create(['wakif_nik' => '1504000011112222']);
 

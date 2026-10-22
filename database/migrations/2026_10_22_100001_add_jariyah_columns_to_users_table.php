@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('username')->nullable()->unique()->after('name');
+            $table->string('role', 20)->default('nazir')->index()->after('username');
             $table->char('nik', 16)->nullable()->unique()->after('username');
             $table->string('phone', 20)->nullable()->after('email');
             $table->foreignId('kecamatan_id')->nullable()->after('phone')->constrained()->nullOnDelete();
@@ -27,7 +28,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropConstrainedForeignId('kecamatan_id');
-            $table->dropColumn(['username', 'nik', 'phone', 'is_active']);
+            $table->dropColumn(['username', 'role', 'nik', 'phone', 'is_active']);
         });
     }
 };

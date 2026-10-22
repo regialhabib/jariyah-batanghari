@@ -8,7 +8,6 @@ use App\Models\Kecamatan;
 use App\Models\Pengajuan;
 use App\Models\TanahWakaf;
 use App\Models\User;
-use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -16,13 +15,6 @@ use Tests\TestCase;
 class SertifikatAdminTest extends TestCase
 {
     use RefreshDatabase;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->seed(RoleSeeder::class);
-    }
 
     public function test_halaman_sertifikat_menampilkan_antrian_dan_tanah_bersertifikat(): void
     {

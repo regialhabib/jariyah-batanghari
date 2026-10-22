@@ -12,12 +12,6 @@ class SecurityTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-    }
-
     public function test_security_settings_page_can_be_rendered(): void
     {
         $user = User::factory()->create();

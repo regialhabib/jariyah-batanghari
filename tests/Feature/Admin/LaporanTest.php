@@ -12,7 +12,6 @@ use App\Models\Pengajuan;
 use App\Models\TanahWakaf;
 use App\Models\User;
 use App\Support\FilterLaporan;
-use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Maatwebsite\Excel\Facades\Excel;
@@ -37,8 +36,6 @@ class LaporanTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->seed(RoleSeeder::class);
 
         $this->kecA = Kecamatan::factory()->create(['nama' => 'Muara Bulian']);
         $this->kecB = Kecamatan::factory()->create(['nama' => 'Pemayung']);

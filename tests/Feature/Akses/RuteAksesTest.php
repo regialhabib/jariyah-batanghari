@@ -7,7 +7,6 @@ use App\Models\Kecamatan;
 use App\Models\Pengajuan;
 use App\Models\TanahWakaf;
 use App\Models\User;
-use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -18,13 +17,6 @@ use Tests\TestCase;
 class RuteAksesTest extends TestCase
 {
     use RefreshDatabase;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->seed(RoleSeeder::class);
-    }
 
     public function test_halaman_publik_bisa_dibuka_tamu(): void
     {

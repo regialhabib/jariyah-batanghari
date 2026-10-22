@@ -4,7 +4,6 @@ namespace Tests\Feature\Admin;
 
 use App\Models\Pesan;
 use App\Models\User;
-use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -15,13 +14,6 @@ use Tests\TestCase;
 class PesanTest extends TestCase
 {
     use RefreshDatabase;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->seed(RoleSeeder::class);
-    }
 
     private function pesan(array $atribut = []): Pesan
     {
