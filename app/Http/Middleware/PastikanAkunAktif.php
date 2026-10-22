@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Providers\FortifyServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,7 @@ class PastikanAkunAktif
             $request->session()->regenerateToken();
 
             return redirect()->route('login')->withErrors([
-                'email' => 'Akun Anda dinonaktifkan. Hubungi Admin BPN.',
+                'email' => FortifyServiceProvider::PESAN_AKUN_NONAKTIF,
             ]);
         }
 

@@ -21,7 +21,9 @@ Route::livewire('faq', 'pages::publik.faq')->name('faq');
 Route::livewire('kontak', 'pages::publik.kontak')->name('kontak');
 Route::livewire('daftar-nazir', 'pages::publik.daftar-nazir')->name('nazir.publik');
 
-Route::get('unduh/semua', [UnduhanController::class, 'semua'])->name('unduhan.semua');
-Route::get('unduh/{unduhan}', [UnduhanController::class, 'show'])->name('unduhan.download');
+Route::middleware('throttle:30,1')->group(function () {
+    Route::get('unduh/semua', [UnduhanController::class, 'semua'])->name('unduhan.semua');
+    Route::get('unduh/{unduhan}', [UnduhanController::class, 'show'])->name('unduhan.download');
+});
 
 Route::get('api/peta', PetaDataController::class)->middleware('throttle:60,1')->name('peta.data');

@@ -4,15 +4,24 @@ namespace App\Providers;
 
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
+use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\LoginRateLimiter;
 
 class FortifyServiceProvider extends ServiceProvider
 {
+    /**
+     * Pesan untuk akun yang dinonaktifkan Admin BPN (docs/06-keamanan.md).
+     */
+    public const PESAN_AKUN_NONAKTIF = 'Akun Anda dinonaktifkan. Hubungi Admin BPN.';
+
     /**
      * Register any application services.
      */
@@ -27,6 +36,7 @@ class FortifyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureActions();
+        $this->configureAuthentication();
         $this->configureViews();
         $this->configureRateLimiting();
     }
@@ -38,6 +48,40 @@ class FortifyServiceProvider extends ServiceProvider
     {
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
         Fortify::createUsersUsing(CreateNewUser::class);
+    }
+
+    /**
+     * Login memakai email ATAU username pada satu input (`email`).
+     * Akun nonaktif ditolak setelah password terbukti benar, agar status akun tidak bocor.
+     */
+    private function configureAuthentication(): void
+    {
+        Fortify::authenticateUsing(function (Request $request): ?User {
+            $login = Str::lower(trim((string) $request->input(Fortify::username())));
+
+            if ($login === '') {
+                return null;
+            }
+
+            $user = User::query()
+                ->whereRaw('LOWER(email) = ?', [$login])
+                ->orWhereRaw('LOWER(username) = ?', [$login])
+                ->first();
+
+            if (! $user || ! Hash::check((string) $request->input('password'), $user->password)) {
+                return null;
+            }
+
+            if (! $user->is_active) {
+                app(LoginRateLimiter::class)->increment($request);
+
+                throw ValidationException::withMessages([
+                    Fortify::username() => self::PESAN_AKUN_NONAKTIF,
+                ]);
+            }
+
+            return $user;
+        });
     }
 
     /**
@@ -62,11 +106,11 @@ class FortifyServiceProvider extends ServiceProvider
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });
 
+        // Input `email` berisi email atau username; batas 5 percobaan/menit per input+IP.
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
 
             return Limit::perMinute(5)->by($throttleKey);
         });
-
     }
 }

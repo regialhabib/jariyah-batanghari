@@ -9,11 +9,12 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Title('Profile settings')] class extends Component {
+new #[Title('Profil')] class extends Component {
     use ProfileValidationRules;
 
     public string $name = '';
     public string $email = '';
+    public string $phone = '';
 
     /**
      * Mount the component.
@@ -22,6 +23,7 @@ new #[Title('Profile settings')] class extends Component {
     {
         $this->name = Auth::user()->name;
         $this->email = Auth::user()->email;
+        $this->phone = (string) Auth::user()->phone;
     }
 
     /**
@@ -31,9 +33,21 @@ new #[Title('Profile settings')] class extends Component {
     {
         $user = Auth::user();
 
-        $validated = $this->validate($this->profileRules($user->id));
+        $validated = $this->validate(
+            [
+                ...$this->profileRules($user->id),
+                'phone' => $this->phoneRules(required: false),
+            ],
+            $this->profileMessages(),
+            $this->profileAttributes(),
+        );
 
-        $user->fill($validated);
+        // NIK & username tidak bisa diubah sendiri; hanya nama, email, dan No. HP.
+        $user->fill([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => filled($validated['phone'] ?? null) ? $validated['phone'] : null,
+        ]);
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
@@ -41,7 +55,7 @@ new #[Title('Profile settings')] class extends Component {
 
         $user->save();
 
-        Flux::toast(variant: 'success', text: __('Profile updated.'));
+        Flux::toast(variant: 'success', text: 'Profil berhasil diperbarui.');
     }
 
     /**
@@ -62,6 +76,17 @@ new #[Title('Profile settings')] class extends Component {
         Session::flash('status', 'verification-link-sent');
     }
 
+    /**
+     * NIK hanya ditampilkan (read-only) untuk Nazir yang sudah mengisinya.
+     */
+    #[Computed]
+    public function nik(): ?string
+    {
+        $user = Auth::user();
+
+        return $user->isNazir() && filled($user->nik) ? $user->nik : null;
+    }
+
     #[Computed]
     public function hasUnverifiedEmail(): bool
     {
@@ -79,14 +104,24 @@ new #[Title('Profile settings')] class extends Component {
 <section class="w-full">
     @include('partials.settings-heading')
 
-    <flux:heading level="2" class="sr-only">{{ __('Profile settings') }}</flux:heading>
+    <flux:heading level="2" class="sr-only">Profil</flux:heading>
 
-    <x-pages::settings.layout :heading="__('Profile')" :subheading="__('Update your name and email address')">
+    <x-pages::settings.layout heading="Profil" subheading="Perbarui nama, email, dan nomor HP Anda">
         <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6">
-            <flux:input wire:model="name" :label="__('Name')" type="text" required autofocus autocomplete="name" />
+            <flux:input wire:model="name" label="Nama Lengkap" type="text" required autofocus autocomplete="name" />
+
+            @if ($this->nik)
+                <flux:input
+                    :value="$this->nik"
+                    label="NIK"
+                    description="NIK tidak dapat diubah. Hubungi Admin BPN jika terdapat kesalahan."
+                    readonly
+                    disabled
+                />
+            @endif
 
             <div>
-                <flux:input wire:model="email" :label="__('Email')" type="email" required autocomplete="email" />
+                <flux:input wire:model="email" label="Email" type="email" required autocomplete="email" />
 
                 @if ($this->hasUnverifiedEmail)
                     <div>
@@ -107,10 +142,19 @@ new #[Title('Profile settings')] class extends Component {
                 @endif
             </div>
 
+            <flux:input
+                wire:model="phone"
+                label="No. HP"
+                type="tel"
+                inputmode="tel"
+                autocomplete="tel"
+                placeholder="08xxxxxxxxxx"
+            />
+
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-end">
                     <flux:button variant="primary" type="submit" class="w-full" data-test="update-profile-button">
-                        {{ __('Save') }}
+                        Simpan
                     </flux:button>
                 </div>
 
