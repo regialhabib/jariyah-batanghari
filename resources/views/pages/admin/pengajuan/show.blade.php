@@ -267,39 +267,111 @@ new #[Title('Pemeriksaan Pengajuan')] class extends Component {
 
             {{-- Dokumen persyaratan --}}
             <section class="kartu p-5" aria-labelledby="judul-dokumen">
-                <h2 id="judul-dokumen" class="font-semibold text-primary-900">Dokumen Persyaratan</h2>
-                @if ($bisaValidasiDokumen)
-                    <p class="mt-1 text-sm text-zinc-600">Periksa setiap dokumen lalu tandai Valid atau Tidak Valid.</p>
+                @php
+                    $jumlahDok = $persyaratan->count();
+                    $jumlahValid = $persyaratan->where('status_validasi', StatusValidasiDokumen::Valid)->count();
+                    $jumlahTidakValid = $persyaratan->where('status_validasi', StatusValidasiDokumen::TidakValid)->count();
+                @endphp
+
+                <div class="flex flex-wrap items-end justify-between gap-x-4 gap-y-1">
+                    <div>
+                        <h2 id="judul-dokumen" class="font-semibold text-primary-900">Dokumen Persyaratan</h2>
+                        @if ($bisaValidasiDokumen)
+                            <p class="mt-1 text-sm text-zinc-600">Buka setiap dokumen, lalu tandai Valid atau Tidak Valid.</p>
+                        @endif
+                    </div>
+                    @if ($jumlahDok > 0)
+                        <p class="text-sm text-zinc-600">
+                            <span class="font-semibold text-primary-800">{{ $jumlahValid }}</span> dari {{ $jumlahDok }} valid
+                            @if ($jumlahTidakValid)
+                                · <span class="font-semibold text-red-700">{{ $jumlahTidakValid }} tidak valid</span>
+                            @endif
+                        </p>
+                    @endif
+                </div>
+
+                @if ($jumlahDok > 0)
+                    {{-- Progres pemeriksaan: hijau = valid, merah = tidak valid, abu = belum diperiksa. --}}
+                    <div class="mt-3 flex h-1.5 overflow-hidden rounded-full bg-zinc-100" role="img"
+                        aria-label="{{ $jumlahValid }} valid, {{ $jumlahTidakValid }} tidak valid, {{ $jumlahDok - $jumlahValid - $jumlahTidakValid }} belum diperiksa">
+                        <div class="bg-primary-600 transition-all" style="width: {{ $jumlahValid / $jumlahDok * 100 }}%"></div>
+                        <div class="bg-red-500 transition-all" style="width: {{ $jumlahTidakValid / $jumlahDok * 100 }}%"></div>
+                    </div>
                 @endif
 
                 @if ($persyaratan->isEmpty())
                     <x-empty-state icon="document" title="Belum ada dokumen" />
                 @else
-                    <ul class="mt-3 divide-y divide-zinc-100">
+                    <ul class="mt-4 space-y-2">
                         @foreach ($persyaratan as $dok)
-                            <li wire:key="dok-{{ $dok->id }}" class="flex flex-wrap items-center justify-between gap-3 py-3">
-                                <div class="flex min-w-0 items-start gap-3">
-                                    <x-ikon-kotak icon="document-text" size="sm" variant="soft" />
+                            @php
+                                $valid = $dok->status_validasi === StatusValidasiDokumen::Valid;
+                                $tidakValid = $dok->status_validasi === StatusValidasiDokumen::TidakValid;
+                            @endphp
+                            <li wire:key="dok-{{ $dok->id }}" @class([
+                                'flex flex-col gap-3 rounded-xl border px-3 py-3 transition sm:flex-row sm:items-center',
+                                'border-primary-200 bg-primary-50/50' => $valid,
+                                'border-red-200 bg-red-50/60' => $tidakValid,
+                                'border-zinc-200 bg-white' => ! $valid && ! $tidakValid,
+                            ])>
+                                <div class="flex min-w-0 flex-1 items-start gap-3">
+                                    <span @class([
+                                        'flex size-9 shrink-0 items-center justify-center rounded-lg',
+                                        'bg-primary-600 text-white' => $valid,
+                                        'bg-red-600 text-white' => $tidakValid,
+                                        'bg-zinc-100 text-zinc-500' => ! $valid && ! $tidakValid,
+                                    ])>
+                                        @if ($valid)
+                                            <flux:icon.check variant="mini" class="size-5" />
+                                        @elseif ($tidakValid)
+                                            <flux:icon.x-mark variant="mini" class="size-5" />
+                                        @else
+                                            <flux:icon.document-text variant="mini" class="size-5" />
+                                        @endif
+                                        <span class="sr-only">{{ $dok->status_validasi->label() }}</span>
+                                    </span>
                                     <div class="min-w-0">
                                         <p class="font-medium text-zinc-800">{{ $dok->judul() }}</p>
-                                        <a href="{{ $dok->url() }}" target="_blank" rel="noopener" class="text-xs text-primary-700 hover:underline">
+                                        <a href="{{ $dok->url() }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs text-primary-700 hover:underline">
+                                            <flux:icon.eye variant="micro" class="size-3.5" />
                                             {{ $dok->nama_asli }} ({{ number_format($dok->ukuran / 1024, 0, ',', '.') }} KB)
                                         </a>
                                         @if ($dok->catatan)
-                                            <p class="mt-0.5 text-xs text-red-700">Catatan: {{ $dok->catatan }}</p>
+                                            <p class="mt-1 text-xs text-red-700"><span class="font-medium">Catatan:</span> {{ $dok->catatan }}</p>
                                         @endif
                                     </div>
                                 </div>
-                                <div class="flex flex-wrap items-center gap-2">
-                                    <x-badge-status :status="$dok->status_validasi" />
-                                    <flux:button size="sm" variant="ghost" icon="eye" :href="$dok->url()" target="_blank" aria-label="Buka {{ $dok->judul() }}" />
-                                    @if ($bisaValidasiDokumen)
-                                        <flux:button size="sm" icon="check" wire:click="tandaiValid({{ $dok->id }})"
-                                            :variant="$dok->status_validasi === StatusValidasiDokumen::Valid ? 'primary' : 'outline'">Valid</flux:button>
-                                        <flux:button size="sm" icon="x-mark" wire:click="bukaTidakValid({{ $dok->id }})"
-                                            :variant="$dok->status_validasi === StatusValidasiDokumen::TidakValid ? 'danger' : 'outline'">Tidak Valid</flux:button>
-                                    @endif
-                                </div>
+
+                                @if ($bisaValidasiDokumen)
+                                    {{-- Tombol pilih berpasangan: pilihan aktif terisi warna, yang lain netral dengan warna saat disorot. --}}
+                                    <div class="grid shrink-0 grid-cols-2 rounded-lg bg-white p-0.5 ring-1 ring-zinc-200 sm:flex sm:self-center" role="group" aria-label="Hasil pemeriksaan {{ $dok->judul() }}">
+                                        <button type="button" aria-pressed="{{ $valid ? 'true' : 'false' }}"
+                                            @unless ($valid) wire:click="tandaiValid({{ $dok->id }})" @endunless
+                                            wire:loading.attr="disabled" wire:target="tandaiValid({{ $dok->id }})"
+                                            @class([
+                                                'inline-flex items-center justify-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium transition disabled:opacity-60 sm:py-1.5',
+                                                'cursor-default bg-primary-600 text-white shadow-sm' => $valid,
+                                                'text-zinc-600 hover:bg-primary-50 hover:text-primary-700' => ! $valid,
+                                            ])>
+                                            <flux:icon.check variant="micro" class="size-4" wire:loading.remove wire:target="tandaiValid({{ $dok->id }})" />
+                                            <flux:icon.loading variant="micro" class="size-4" wire:loading wire:target="tandaiValid({{ $dok->id }})" />
+                                            Valid
+                                        </button>
+                                        <button type="button" aria-pressed="{{ $tidakValid ? 'true' : 'false' }}"
+                                            wire:click="bukaTidakValid({{ $dok->id }})"
+                                            @if ($tidakValid) title="Ubah catatan" @endif
+                                            @class([
+                                                'inline-flex items-center justify-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium transition sm:py-1.5',
+                                                'bg-red-600 text-white shadow-sm hover:bg-red-700' => $tidakValid,
+                                                'text-zinc-600 hover:bg-red-50 hover:text-red-700' => ! $tidakValid,
+                                            ])>
+                                            <flux:icon.x-mark variant="micro" class="size-4" />
+                                            Tidak Valid
+                                        </button>
+                                    </div>
+                                @else
+                                    <x-badge-status :status="$dok->status_validasi" class="self-start sm:self-center" />
+                                @endif
                             </li>
                         @endforeach
                     </ul>
