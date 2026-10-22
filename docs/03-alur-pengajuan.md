@@ -65,6 +65,7 @@ Selain transisi di atas, semuanya **ditolak** oleh service.
   3. menjalankan efek samping di dalam transaksi DB
   4. mencatat ke `riwayat_pengajuans`
   5. mengirim notifikasi database (dan email) ke Nazir
+- **Operasi Nazir di luar transisi** juga lewat service yang sama: `buatDraf`, `unggahDokumen`, `ubahDataTanah` (hanya pengajuan AIW yang masih bisa diubah; kode tanah menyesuaikan bila kecamatan berganti), dan `hapusDraf` (hanya draf; dokumen dihapus dari disk, dan tanah yang lahir dari draf AIW itu ikut dihapus bila belum disahkan, belum dipublikasikan, dan tidak dipakai pengajuan lain).
 - **Syarat sebelum kirim:** semua dokumen persyaratan `wajib` untuk jenis tersebut sudah diunggah.
 - **Validasi per dokumen:** pemeriksa bisa menandai tiap dokumen `valid` atau `tidak_valid` + catatan. Jika ada dokumen `tidak_valid`, pemeriksa hanya bisa memilih "minta perbaikan" atau "tolak", bukan "sahkan/verifikasi".
 - **Perbaikan:** Nazir hanya bisa mengganti dokumen yang ditandai `tidak_valid`. Saat diganti, status dokumen kembali ke `menunggu`.

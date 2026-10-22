@@ -7,6 +7,7 @@ use App\Enums\KategoriDokumen;
 use App\Enums\StatusPengajuan;
 use App\Enums\StatusSertifikat;
 use App\Enums\StatusValidasiDokumen;
+use App\Models\Desa;
 use App\Models\Pengajuan;
 use App\Models\PengajuanDokumen;
 use App\Models\Persyaratan;
@@ -63,6 +64,57 @@ class PengajuanWorkflow
                 'status' => StatusPengajuan::Draf,
             ]);
         });
+    }
+
+    /**
+     * Mengubah data tanah milik draf/perbaikan pengajuan AIW. Kode tanah ikut menyesuaikan
+     * bila kecamatan berubah, selama tanah belum dipublikasikan dan belum punya nomor AIW.
+     *
+     * @param  array<string, mixed>  $dataTanah
+     */
+    public function ubahDataTanah(Pengajuan $pengajuan, User $nazir, array $dataTanah): TanahWakaf
+    {
+        Gate::forUser($nazir)->authorize('update', $pengajuan);
+
+        if ($pengajuan->jenis !== JenisPengajuan::Aiw) {
+            throw ValidationException::withMessages(['status' => 'Data tanah hanya bisa diubah pada pengajuan AIW.']);
+        }
+
+        $tanah = $pengajuan->tanahWakaf()->with('desa')->firstOrFail();
+        $desaBaru = (int) $dataTanah['desa_id'];
+
+        if ($desaBaru !== $tanah->desa_id && ! $tanah->is_published && blank($tanah->nomor_aiw)
+            && Desa::find($desaBaru)?->kecamatan_id !== $tanah->desa?->kecamatan_id) {
+            $tanah->kode = TanahWakaf::buatKode($desaBaru);
+        }
+
+        $tanah->fill($dataTanah)->save();
+
+        return $tanah;
+    }
+
+    /**
+     * Menghapus draf beserta dokumennya. Tanah yang lahir dari draf AIW ini (belum disahkan,
+     * belum dipublikasikan, tanpa pengajuan lain) ikut dihapus.
+     */
+    public function hapusDraf(Pengajuan $pengajuan, User $nazir): void
+    {
+        Gate::forUser($nazir)->authorize('delete', $pengajuan);
+
+        $paths = $pengajuan->dokumens()->pluck('path')->all();
+
+        DB::transaction(function () use ($pengajuan) {
+            $tanah = $pengajuan->tanahWakaf;
+            $pengajuan->delete();
+
+            if ($pengajuan->jenis === JenisPengajuan::Aiw && $tanah
+                && $tanah->sumber === 'pengajuan' && blank($tanah->nomor_aiw) && ! $tanah->is_published
+                && ! $tanah->pengajuans()->exists()) {
+                $tanah->delete();
+            }
+        });
+
+        Storage::disk(self::DISK)->delete($paths);
     }
 
     /**

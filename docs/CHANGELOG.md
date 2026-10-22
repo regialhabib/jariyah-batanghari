@@ -2,6 +2,16 @@
 
 Format: tanggal, apa yang diputuskan atau diubah, dan alasannya. Entri terbaru di atas.
 
+## 2026-10-22 (Fase 5 & 7 selesai)
+- **Area Nazir:** wizard AIW (jenis → data tanah → lokasi → ringkasan) dan wizard sertifikat (pilih tanah yang memenuhi syarat). Dokumen diunggah di halaman detail pengajuan dan langsung tersimpan saat dipilih. Saat `perlu_perbaikan`, hanya dokumen `tidak_valid` atau yang belum ada yang bisa diganti; aturan ini ditegakkan di UI dan server.
+- **Hapus draf dan ubah data tanah AIW dipindah ke `PengajuanWorkflow`** (`hapusDraf`, `ubahDataTanah`), supaya aturan bisnis tidak tersebar di komponen.
+- **Peta di area Nazir/admin** mengarahkan popup ke halaman internal, karena tanah yang belum dipublikasikan memberi 404 di halaman publik.
+- **Laporan:** semua filter (halaman, Excel, PDF) melewati satu kelas `App\Support\FilterLaporan`, yang selalu menerapkan `forUser` dan mengunci KUA ke kecamatannya. Ekspor tidak pernah memuat NIK wakif.
+- **Excel memakai maatwebsite/excel v4**: kelas ekspor wajib mengimplementasikan `Concerns\Export`.
+- **Purifier mengizinkan tag keluaran Trix** (`h2`, `h3`, `blockquote`, `pre`, `del`, `s`). `<script>` dan atribut berbahaya tetap dibuang.
+- **Pengguna:** form admin hanya bisa membuat role `admin_bpn`, `bpn`, `kua`. Akun Nazir yang diedit admin hanya bisa diubah nama, email, HP, dan status aktif; bila email Nazir diganti, verifikasi email direset. Admin tidak bisa menurunkan role atau menonaktifkan dirinya sendiri.
+- **Persyaratan yang sudah dipakai dokumen pengajuan tidak bisa dihapus**; admin ditawari menjadikannya "tidak wajib".
+
 ## 2026-10-22 (Fase 2–4 selesai)
 - **Login menerima email atau username** (tanpa beda huruf besar/kecil). Pesan "akun dinonaktifkan" baru muncul setelah password benar, supaya status akun tidak bisa ditebak. Teks pesan disatukan di `FortifyServiceProvider::PESAN_AKUN_NONAKTIF` dan dipakai juga oleh middleware `PastikanAkunAktif`.
 - **Registrasi selalu memberi role `nazir`**, tidak bisa disuntik dari form.

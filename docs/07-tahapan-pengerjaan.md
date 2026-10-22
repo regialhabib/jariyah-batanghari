@@ -81,12 +81,12 @@ Fase 0 dan 1 adalah **fondasi** dan dikerjakan berurutan oleh satu pelaksana (su
 - [x] Mode mini (dashboard) dan mode pilih lokasi + gambar polygon (wizard)
 
 ## Fase 5 · Area Nazir (G2-D)
-- [ ] Dashboard (kartu, tabel terbaru, peta mini)
-- [ ] Data Wakaf Saya
-- [ ] Wizard pengajuan (simpan draf, unggah dokumen, kirim)
-- [ ] Detail pengajuan + riwayat + perbaikan dokumen
-- [ ] Halaman Dokumen
-- [ ] Peta Saya
+- [x] Dashboard (kartu, tabel terbaru, peta mini)
+- [x] Data Wakaf Saya
+- [x] Wizard pengajuan (simpan draf, unggah dokumen, kirim)
+- [x] Detail pengajuan + riwayat + perbaikan dokumen
+- [x] Halaman Dokumen
+- [x] Peta Saya
 
 ## Fase 6 · Area Admin: data & pengajuan (G2-E)
 - [ ] Dashboard (kartu, grafik per kecamatan, peta mini)
@@ -98,17 +98,17 @@ Fase 0 dan 1 adalah **fondasi** dan dikerjakan berurutan oleh satu pelaksana (su
 - [ ] Peta admin
 
 ## Fase 7 · Konten, pengguna, laporan (G2-F)
-- [ ] Kelola Konten: artikel (Trix), persyaratan, panduan, FAQ, unduhan, pengaturan
-- [ ] Kelola Pengguna: buat petugas BPN/KUA, nonaktifkan, reset password
-- [ ] Pesan Masuk
-- [ ] Log Aktivitas
-- [ ] Laporan: filter kecamatan/status/periode, tabel + grafik, ekspor Excel, ekspor PDF ber-kop
+- [x] Kelola Konten: artikel (Trix), persyaratan, panduan, FAQ, unduhan, pengaturan
+- [x] Kelola Pengguna: buat petugas BPN/KUA, nonaktifkan, reset password
+- [x] Pesan Masuk
+- [x] Log Aktivitas
+- [x] Laporan: filter kecamatan/status/periode, tabel + grafik, ekspor Excel, ekspor PDF ber-kop
 
 ## Fase 8 · Integrasi & pemolesan (G3)
 - [ ] Skenario end-to-end (lihat 09) lulus
 - [ ] Audit akses semua rute per role
 - [ ] Tampilan HP semua halaman
-- [ ] Halaman error 403/404/419/500
-- [ ] Meta title/description, favicon
-- [ ] README proyek (cara install & menjalankan)
-- [ ] Catatan deploy
+- [x] Halaman error 403/404/419/429/500/503
+- [x] Meta title/description, favicon, robots.txt
+- [x] README proyek (cara install & menjalankan)
+- [x] Catatan deploy ([10-deploy.md](10-deploy.md))
