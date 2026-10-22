@@ -186,8 +186,8 @@ new #[Title('Kelola Unduhan')] class extends Component {
                             <flux:table.cell align="end">{{ number_format($unduhan->jumlah_unduh, 0, ',', '.') }}×</flux:table.cell>
                             <flux:table.cell align="end">
                                 <div class="flex justify-end gap-1">
-                                    <flux:button size="sm" variant="ghost" icon="pencil-square" wire:click="ubah({{ $unduhan->id }})" aria-label="Ubah" />
-                                    <flux:button size="sm" variant="ghost" icon="trash" class="text-red-600!" wire:click="hapus({{ $unduhan->id }})"
+                                    <flux:button size="sm" variant="ghost" icon="pencil-square" tooltip="Ubah" wire:click="ubah({{ $unduhan->id }})" aria-label="Ubah" />
+                                    <flux:button size="sm" variant="ghost" icon="trash" tooltip="Hapus" class="text-zinc-400! hover:bg-red-50! hover:text-red-600!" wire:click="hapus({{ $unduhan->id }})"
                                         wire:confirm="Hapus dokumen &quot;{{ $unduhan->judul }}&quot; beserta filenya?" aria-label="Hapus" />
                                 </div>
                             </flux:table.cell>
@@ -205,21 +205,20 @@ new #[Title('Kelola Unduhan')] class extends Component {
             <flux:input wire:model="keterangan" label="Keterangan (opsional)" />
             <flux:input type="number" min="0" max="999" wire:model="urutan" label="Urutan" required />
 
-            <flux:field>
-                <flux:label>{{ $editId ? 'Ganti File (opsional)' : 'File' }}</flux:label>
+            <div class="space-y-2">
                 @if ($fileLama)
-                    <div class="flex items-center justify-between gap-2 rounded-lg bg-primary-50 px-3 py-2 text-sm">
-                        <span class="truncate">File saat ini: {{ $fileLama }}</span>
-                        <flux:button size="xs" variant="ghost" class="text-red-600!" wire:click="hapusFile({{ $editId }})"
+                    <div class="flex items-center justify-between gap-2 rounded-lg bg-zinc-50 px-3 py-2 text-sm ring-1 ring-zinc-200">
+                        <span class="flex min-w-0 items-center gap-2">
+                            <flux:icon.paper-clip variant="micro" class="size-4 shrink-0 text-zinc-500" />
+                            <span class="truncate">File saat ini: {{ $fileLama }}</span>
+                        </span>
+                        <flux:button size="xs" variant="ghost" icon="trash" class="text-zinc-500! hover:text-red-600!" wire:click="hapusFile({{ $editId }})"
                             wire:confirm="Hapus file ini? Entri tetap ada dan tampil sebagai belum tersedia.">Hapus file</flux:button>
                     </div>
                 @endif
-                <input type="file" wire:model="berkas" accept=".pdf,.doc,.docx,.xls,.xlsx"
-                    class="block w-full text-sm text-zinc-700 file:me-3 file:rounded-md file:border-0 file:bg-primary-50 file:px-3 file:py-2 file:text-sm file:font-medium file:text-primary-700 hover:file:bg-primary-100" />
-                <flux:description>PDF, DOC, DOCX, XLS, atau XLSX. Maksimal 10 MB.</flux:description>
-                <div wire:loading wire:target="berkas" class="text-xs text-zinc-500">Mengunggah…</div>
-                <flux:error name="berkas" />
-            </flux:field>
+                <x-admin.unggah-berkas wire:model="berkas" :label="$editId ? 'Ganti file (opsional)' : 'File'" accept=".pdf,.doc,.docx,.xls,.xlsx"
+                    keterangan="PDF, DOC, DOCX, XLS, atau XLSX. Maksimal 10 MB." />
+            </div>
 
             <div class="flex justify-end gap-2">
                 <flux:modal.close>

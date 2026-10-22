@@ -126,16 +126,9 @@ new #[Title('Pengajuan')] class extends Component {
 }; ?>
 
 <div class="space-y-6">
-    <div>
-        <flux:heading size="xl" level="1">Pengajuan</flux:heading>
-        <flux:text class="mt-1">
-            @if (auth()->user()->isKua())
-                Pengajuan di Kecamatan {{ auth()->user()->kecamatan?->nama }}. Anda memeriksa pengajuan Akta Ikrar Wakaf (AIW).
-            @else
-                Pengajuan dari Nazir. BPN memeriksa pengajuan sertifikat wakaf.
-            @endif
-        </flux:text>
-    </div>
+    <x-admin.judul-halaman judul="Pengajuan" :deskripsi="auth()->user()->isKua()
+        ? 'Pengajuan di Kecamatan '.auth()->user()->kecamatan?->nama.'. Anda memeriksa pengajuan Akta Ikrar Wakaf (AIW).'
+        : 'Pengajuan dari Nazir. BPN memeriksa pengajuan sertifikat wakaf.'" />
 
     <div class="flex flex-wrap gap-2" role="tablist">
         <button type="button" role="tab" wire:click="pilihTab('periksa')" aria-selected="{{ $tab === 'periksa' ? 'true' : 'false' }}"
@@ -151,7 +144,7 @@ new #[Title('Pengajuan')] class extends Component {
         </button>
     </div>
 
-    <div class="kartu grid gap-3 p-5 sm:grid-cols-2 lg:grid-cols-5">
+    <div class="kartu grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-5">
         <div class="sm:col-span-2">
             <flux:input wire:model.live.debounce.400ms="q" icon="magnifying-glass" placeholder="Cari nomor, nama tanah, atau Nazir..." maxlength="100" aria-label="Cari" />
         </div>

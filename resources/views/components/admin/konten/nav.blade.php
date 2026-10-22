@@ -19,17 +19,9 @@
 @endphp
 
 <div {{ $attributes->class(['space-y-4']) }}>
-    <div class="flex flex-wrap items-end justify-between gap-3">
-        <div>
-            <p class="text-sm font-medium text-primary-700">Kelola Konten</p>
-            <flux:heading size="xl" level="1">{{ $judul }}</flux:heading>
-            @if ($deskripsi)
-                <flux:text class="mt-1">{{ $deskripsi }}</flux:text>
-            @endif
-        </div>
-
+    <x-admin.judul-halaman :judul="$judul" :deskripsi="$deskripsi" eyebrow="Kelola Konten">
         {{ $slot }}
-    </div>
+    </x-admin.judul-halaman>
 
     <nav aria-label="Sub-menu Kelola Konten" class="-mx-1 overflow-x-auto">
         <ul class="flex min-w-max gap-1 border-b border-primary-100 px-1">

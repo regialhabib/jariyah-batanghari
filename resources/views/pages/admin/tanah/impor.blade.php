@@ -131,21 +131,15 @@ new #[Title('Impor Data Wakaf')] class extends Component {
 }; ?>
 
 <div class="space-y-6">
-    <div class="flex flex-wrap items-center justify-between gap-3">
-        <div>
-            <flux:heading size="xl" level="1">Impor Data Wakaf</flux:heading>
-            <flux:text class="mt-1">Unggah data tanah wakaf dari berkas Excel (.xlsx) atau CSV sesuai template.</flux:text>
-        </div>
-        <flux:button variant="ghost" icon="arrow-left" :href="route('admin.tanah.index')" wire:navigate>Kembali</flux:button>
-    </div>
+    <x-admin.judul-halaman judul="Impor Data Wakaf" deskripsi="Unggah data tanah wakaf dari berkas Excel (.xlsx) atau CSV sesuai template."
+        :kembali="route('admin.tanah.index')" label-kembali="Kembali ke data wakaf" />
 
     <div class="grid gap-6 lg:grid-cols-3">
         <section class="kartu space-y-4 p-5 lg:col-span-2">
             <h2 class="font-semibold text-primary-900">1. Unggah berkas</h2>
 
             <form wire:submit="periksa" class="space-y-4">
-                <flux:input type="file" wire:model="berkas" accept=".xlsx,.xls,.csv" label="Berkas data" description="Format .xlsx, .xls, atau .csv. Maksimal 5 MB." />
-                <div wire:loading wire:target="berkas" class="text-sm text-zinc-500">Mengunggah berkas…</div>
+                <x-admin.unggah-berkas wire:model="berkas" accept=".xlsx,.xls,.csv" label="Berkas data" keterangan="Format .xlsx, .xls, atau .csv. Maksimal 5 MB." />
 
                 <div class="flex flex-wrap gap-2">
                     <flux:button type="submit" variant="primary" icon="magnifying-glass" wire:loading.attr="disabled" wire:target="berkas,periksa">Periksa Berkas</flux:button>

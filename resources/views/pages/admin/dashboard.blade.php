@@ -92,17 +92,14 @@ new #[Title('Dashboard')] class extends Component {
 }; ?>
 
 <div class="space-y-6">
-    <div class="flex flex-wrap items-end justify-between gap-3">
-        <div>
-            <flux:heading size="xl" level="1">Selamat Datang, {{ auth()->user()->name }}</flux:heading>
-            <flux:text class="mt-1">
-                {{ now()->locale('id')->translatedFormat('l, j F Y') }}
-                @if (auth()->user()->isKua() && auth()->user()->kecamatan)
-                    · Wilayah {{ auth()->user()->kecamatan->nama }}
-                @endif
-            </flux:text>
-        </div>
-    </div>
+    <x-admin.judul-halaman :judul="'Selamat Datang, '.auth()->user()->name">
+        <x-slot:keterangan>
+            {{ now()->locale('id')->translatedFormat('l, j F Y') }}
+            @if (auth()->user()->isKua() && auth()->user()->kecamatan)
+                · Wilayah {{ auth()->user()->kecamatan->nama }}
+            @endif
+        </x-slot:keterangan>
+    </x-admin.judul-halaman>
 
     <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <x-stat-card icon="map-pin" label="Total Tanah Wakaf" :value="$this->ringkasan['total']" satuan="Bidang" :href="route('admin.tanah.index')" />

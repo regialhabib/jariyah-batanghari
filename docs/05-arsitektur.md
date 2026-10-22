@@ -144,6 +144,9 @@ new #[Layout('layouts::publik'), Title('Persyaratan')] class extends Component {
 | Komponen | Pemakaian |
 |---|---|
 | `<x-page-header title="" :breadcrumb="[['label'=>'Beranda','url'=>route('beranda')],['label'=>'X']]" subtitle="" icon="" />` | Banner judul halaman publik |
+| `<x-admin.judul-halaman judul="" deskripsi="" :kembali="url" label-kembali="" eyebrow="">aksi</x-admin.judul-halaman>` | Judul halaman admin: tautan kembali, judul, keterangan (prop atau slot `keterangan`), tombol aksi di kanan. Dipakai semua halaman admin, termasuk `<x-admin.konten.nav>` |
+| `<x-admin.unggah-berkas wire:model="berkas" label="" keterangan="" accept=".pdf" />` | Pengganti `<input type="file">` bawaan (berbahasa Inggris): nama berkas terpilih, seret-lepas, progres unggah |
+| `<x-admin.bilah-simpan>tombol</x-admin.bilah-simpan>` | Bilah tombol simpan yang menempel di bawah layar untuk form panjang, dengan penanda "Ada perubahan yang belum disimpan" (`wire:dirty`) |
 | `<x-stat-card icon="map-pin" label="Total Tanah Wakaf" :value="125" satuan="Bidang" href="" />` | Kartu statistik |
 | `<x-ikon-kotak icon="document-text" size="sm\|md\|lg" variant="solid\|soft" />` | Ikon heroicon dalam kotak hijau |
 | `<x-badge-status :status="$enum" />` | Badge untuk enum yang punya label() + warna() |

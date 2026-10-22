@@ -87,10 +87,7 @@ new #[Title('Sertifikat')] class extends Component {
 }; ?>
 
 <div class="space-y-6">
-    <div>
-        <flux:heading size="xl" level="1">Sertifikat</flux:heading>
-        <flux:text class="mt-1">Pencatatan sertifikat wakaf yang telah terbit.</flux:text>
-    </div>
+    <x-admin.judul-halaman judul="Sertifikat" deskripsi="Pencatatan sertifikat wakaf yang telah terbit." />
 
     <section class="kartu p-5" aria-labelledby="judul-menunggu">
         <div class="flex items-center gap-2">
@@ -157,7 +154,7 @@ new #[Title('Sertifikat')] class extends Component {
                                 <flux:table.cell>{{ $tanah->tanggal_sertifikat?->locale('id')->translatedFormat('j M Y') ?? '-' }}</flux:table.cell>
                                 <flux:table.cell align="end">
                                     @can('update', $tanah)
-                                        <flux:button size="sm" variant="ghost" icon="pencil-square" :href="route('admin.tanah.edit', $tanah)" wire:navigate aria-label="Ubah {{ $tanah->nama }}" />
+                                        <flux:button size="sm" variant="ghost" icon="pencil-square" tooltip="Ubah" :href="route('admin.tanah.edit', $tanah)" wire:navigate aria-label="Ubah {{ $tanah->nama }}" />
                                     @endcan
                                 </flux:table.cell>
                             </flux:table.row>

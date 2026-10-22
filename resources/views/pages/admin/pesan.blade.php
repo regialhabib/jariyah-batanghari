@@ -99,13 +99,9 @@ new #[Title('Pesan Masuk')] class extends Component {
 }; ?>
 
 <div class="space-y-6">
-    <div class="flex flex-wrap items-end justify-between gap-3">
-        <div>
-            <flux:heading size="xl" level="1">Pesan Masuk</flux:heading>
-            <flux:text class="mt-1">Pesan dari form Kontak di situs publik. {{ $this->jumlahBelumDibaca }} belum dibaca.</flux:text>
-        </div>
+    <x-admin.judul-halaman judul="Pesan Masuk" :deskripsi="'Pesan dari form Kontak di situs publik. '.$this->jumlahBelumDibaca.' belum dibaca.'">
         <flux:switch wire:model.live="belumDibaca" label="Hanya yang belum dibaca" />
-    </div>
+    </x-admin.judul-halaman>
 
     <div class="kartu overflow-hidden">
         @forelse ($this->pesans as $pesan)
@@ -143,7 +139,7 @@ new #[Title('Pesan Masuk')] class extends Component {
                 <div class="rounded-lg bg-zinc-50 p-4 text-sm whitespace-pre-line text-zinc-800">{{ $pesan->isi }}</div>
                 <div class="flex flex-wrap justify-between gap-2">
                     <div class="flex gap-2">
-                        <flux:button size="sm" variant="ghost" icon="trash" class="text-red-600!" wire:click="hapus({{ $pesan->id }})" wire:confirm="Hapus pesan ini?">Hapus</flux:button>
+                        <flux:button size="sm" variant="ghost" icon="trash" class="hover:bg-red-50! hover:text-red-600!" wire:click="hapus({{ $pesan->id }})" wire:confirm="Hapus pesan ini?">Hapus</flux:button>
                         <flux:button size="sm" variant="ghost" icon="envelope" wire:click="tandaiBelumDibaca({{ $pesan->id }})">Tandai belum dibaca</flux:button>
                     </div>
                     @if ($balas = $this->tautanBalas($pesan))

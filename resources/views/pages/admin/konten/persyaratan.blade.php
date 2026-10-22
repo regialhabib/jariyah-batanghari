@@ -186,8 +186,8 @@ new #[Title('Kelola Persyaratan')] class extends Component {
                                 @endif
                             </div>
                             <div class="flex shrink-0 gap-1">
-                                <flux:button size="sm" variant="ghost" icon="pencil-square" wire:click="ubah({{ $p->id }})" aria-label="Ubah" />
-                                <flux:button size="sm" variant="ghost" icon="trash" class="text-red-600!" wire:click="hapus({{ $p->id }})"
+                                <flux:button size="sm" variant="ghost" icon="pencil-square" tooltip="Ubah" wire:click="ubah({{ $p->id }})" aria-label="Ubah" />
+                                <flux:button size="sm" variant="ghost" icon="trash" tooltip="Hapus" class="text-zinc-400! hover:bg-red-50! hover:text-red-600!" wire:click="hapus({{ $p->id }})"
                                     wire:confirm="Hapus persyaratan &quot;{{ $p->nama }}&quot;?" aria-label="Hapus" />
                             </div>
                         </li>

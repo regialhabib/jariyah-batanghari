@@ -204,19 +204,13 @@ new #[Title('Pemeriksaan Pengajuan')] class extends Component {
         $galatAlur = collect(['dokumen', 'status', 'catatan'])->flatMap(fn ($k) => $errors->get($k));
     @endphp
 
-    <div class="flex flex-wrap items-start justify-between gap-3">
-        <div>
-            <a href="{{ route('admin.pengajuan.index') }}" wire:navigate class="mb-2 inline-flex items-center gap-1 text-sm font-medium text-primary-700 hover:underline">
-                <flux:icon.arrow-left class="size-4" /> Kembali ke daftar pengajuan
-            </a>
-            <flux:heading size="xl" level="1">Pemeriksaan Pengajuan</flux:heading>
-            <flux:text class="mt-1">
-                <span class="font-mono">{{ $p->nomor ?? '-' }}</span> · {{ $p->jenis->label() }}
-                @if ($p->diajukan_at) · Diajukan {{ $tgl($p->diajukan_at) }} @endif
-            </flux:text>
-        </div>
+    <x-admin.judul-halaman judul="Pemeriksaan Pengajuan" :kembali="route('admin.pengajuan.index')" label-kembali="Kembali ke daftar pengajuan">
+        <x-slot:keterangan>
+            <span class="font-mono">{{ $p->nomor ?? '-' }}</span> · {{ $p->jenis->label() }}
+            @if ($p->diajukan_at) · Diajukan {{ $tgl($p->diajukan_at) }} @endif
+        </x-slot:keterangan>
         <x-badge-status :status="$p->status" class="px-3! py-1! text-sm!" />
-    </div>
+    </x-admin.judul-halaman>
 
     @if ($galatAlur->isNotEmpty())
         <flux:callout variant="danger" icon="exclamation-triangle" heading="Tindakan tidak dapat diproses">
@@ -356,7 +350,7 @@ new #[Title('Pemeriksaan Pengajuan')] class extends Component {
                             <flux:button icon="arrow-uturn-left" class="w-full">Minta Perbaikan</flux:button>
                         </flux:modal.trigger>
                         <flux:modal.trigger name="tolak-pengajuan">
-                            <flux:button variant="danger" icon="x-circle" class="w-full">Tolak</flux:button>
+                            <flux:button variant="ghost" icon="x-circle" class="w-full text-red-600! hover:bg-red-50!">Tolak Pengajuan</flux:button>
                         </flux:modal.trigger>
                     </div>
                 @elseif ($bisaPeriksa && $p->status === StatusPengajuan::Terverifikasi)
@@ -366,7 +360,7 @@ new #[Title('Pemeriksaan Pengajuan')] class extends Component {
                             <flux:button variant="primary" icon="shield-check" class="w-full">Catat Sertifikat Terbit</flux:button>
                         </flux:modal.trigger>
                         <flux:modal.trigger name="tolak-pengajuan">
-                            <flux:button variant="danger" icon="x-circle" class="w-full">Tolak</flux:button>
+                            <flux:button variant="ghost" icon="x-circle" class="w-full text-red-600! hover:bg-red-50!">Tolak Pengajuan</flux:button>
                         </flux:modal.trigger>
                     </div>
                 @else
@@ -467,7 +461,7 @@ new #[Title('Pemeriksaan Pengajuan')] class extends Component {
                 <flux:input wire:model="nomorAiw" label="Nomor AIW" required />
                 <flux:input wire:model="tanggalAiw" label="Tanggal AIW" type="date" required />
             </div>
-            <flux:input type="file" wire:model="scanAiw" label="Scan AIW (opsional)" accept=".pdf,.jpg,.jpeg,.png" description="PDF, JPG, atau PNG, maksimal 5 MB." />
+            <x-admin.unggah-berkas wire:model="scanAiw" label="Scan AIW (opsional)" accept=".pdf,.jpg,.jpeg,.png" keterangan="PDF, JPG, atau PNG, maksimal 5 MB." />
             <flux:textarea wire:model="catatanAiw" label="Catatan (opsional)" rows="2" />
             <div class="flex justify-end gap-2">
                 <flux:modal.close><flux:button variant="ghost">Batal</flux:button></flux:modal.close>
@@ -495,7 +489,7 @@ new #[Title('Pemeriksaan Pengajuan')] class extends Component {
                 <flux:input wire:model="nomorSertifikat" label="Nomor sertifikat" required />
                 <flux:input wire:model="tanggalSertifikat" label="Tanggal terbit" type="date" required />
             </div>
-            <flux:input type="file" wire:model="scanSertifikat" label="Scan sertifikat (opsional)" accept=".pdf,.jpg,.jpeg,.png" description="PDF, JPG, atau PNG, maksimal 5 MB." />
+            <x-admin.unggah-berkas wire:model="scanSertifikat" label="Scan sertifikat (opsional)" accept=".pdf,.jpg,.jpeg,.png" keterangan="PDF, JPG, atau PNG, maksimal 5 MB." />
             <flux:textarea wire:model="catatanSertifikat" label="Catatan (opsional)" rows="2" />
             <div class="flex justify-end gap-2">
                 <flux:modal.close><flux:button variant="ghost">Batal</flux:button></flux:modal.close>

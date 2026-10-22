@@ -140,8 +140,8 @@ new #[Title('Kelola Pengaturan')] class extends Component {
             </section>
         @endforeach
 
-        <div class="flex justify-end">
+        <x-admin.bilah-simpan>
             <flux:button type="submit" variant="primary" icon="check">Simpan Pengaturan</flux:button>
-        </div>
+        </x-admin.bilah-simpan>
     </form>
 </div>

@@ -162,27 +162,16 @@ new #[Title('Data Wakaf')] class extends Component {
 }; ?>
 
 <div class="space-y-6">
-    <div class="flex flex-wrap items-center justify-between gap-3">
-        <div>
-            <flux:heading size="xl" level="1">Data Wakaf</flux:heading>
-            <flux:text class="mt-1">
-                @if (auth()->user()->isKua())
-                    Data tanah wakaf di Kecamatan {{ auth()->user()->kecamatan?->nama }} (hanya lihat).
-                @else
-                    Kelola data tanah wakaf di Kabupaten Batang Hari.
-                @endif
-            </flux:text>
-        </div>
-
-        <div class="flex flex-wrap gap-2">
-            @can('impor', \App\Models\TanahWakaf::class)
-                <flux:button icon="arrow-up-tray" :href="route('admin.tanah.impor')" wire:navigate>Impor Excel</flux:button>
-            @endcan
-            @can('create', \App\Models\TanahWakaf::class)
-                <flux:button variant="primary" icon="plus" :href="route('admin.tanah.create')" wire:navigate>Tambah Data</flux:button>
-            @endcan
-        </div>
-    </div>
+    <x-admin.judul-halaman judul="Data Wakaf" :deskripsi="auth()->user()->isKua()
+        ? 'Data tanah wakaf di Kecamatan '.auth()->user()->kecamatan?->nama.' (hanya lihat).'
+        : 'Kelola data tanah wakaf di Kabupaten Batang Hari.'">
+        @can('impor', \App\Models\TanahWakaf::class)
+            <flux:button icon="arrow-up-tray" :href="route('admin.tanah.impor')" wire:navigate>Impor Excel</flux:button>
+        @endcan
+        @can('create', \App\Models\TanahWakaf::class)
+            <flux:button variant="primary" icon="plus" :href="route('admin.tanah.create')" wire:navigate>Tambah Data</flux:button>
+        @endcan
+    </x-admin.judul-halaman>
 
     <div class="kartu space-y-4 p-5">
         <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
@@ -267,12 +256,12 @@ new #[Title('Data Wakaf')] class extends Component {
                                 </flux:table.cell>
                                 <flux:table.cell align="end">
                                     <div class="flex justify-end gap-1">
-                                        <flux:button size="sm" variant="ghost" icon="eye" wire:click="lihat({{ $tanah->id }})" aria-label="Detail {{ $tanah->nama }}" />
+                                        <flux:button size="sm" variant="ghost" icon="eye" tooltip="Detail" wire:click="lihat({{ $tanah->id }})" aria-label="Detail {{ $tanah->nama }}" />
                                         @can('update', $tanah)
-                                            <flux:button size="sm" variant="ghost" icon="pencil-square" :href="route('admin.tanah.edit', $tanah)" wire:navigate aria-label="Ubah {{ $tanah->nama }}" />
+                                            <flux:button size="sm" variant="ghost" icon="pencil-square" tooltip="Ubah" :href="route('admin.tanah.edit', $tanah)" wire:navigate aria-label="Ubah {{ $tanah->nama }}" />
                                         @endcan
                                         @can('delete', $tanah)
-                                            <flux:button size="sm" variant="ghost" icon="trash" class="text-red-600!" wire:click="konfirmasiHapus({{ $tanah->id }})" aria-label="Hapus {{ $tanah->nama }}" />
+                                            <flux:button size="sm" variant="ghost" icon="trash" tooltip="Hapus" class="text-zinc-400! hover:bg-red-50! hover:text-red-600!" wire:click="konfirmasiHapus({{ $tanah->id }})" aria-label="Hapus {{ $tanah->nama }}" />
                                         @endcan
                                     </div>
                                 </flux:table.cell>

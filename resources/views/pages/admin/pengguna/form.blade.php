@@ -186,20 +186,13 @@ new #[Title('Form Pengguna')] class extends Component {
     }
 }; ?>
 
-<div class="mx-auto max-w-3xl space-y-6">
-    <div>
-        <a href="{{ route('admin.pengguna.index') }}" wire:navigate class="inline-flex items-center gap-1 text-sm text-primary-700 hover:underline">
-            <flux:icon.arrow-left variant="micro" class="size-4" /> Kembali ke daftar pengguna
-        </a>
-        <flux:heading size="xl" level="1" class="mt-2">
-            {{ $userId ? 'Ubah Pengguna' : 'Tambah Petugas' }}
-        </flux:heading>
-        @if ($modeNazir)
-            <flux:text class="mt-1">Akun Nazir: hanya nama, email, No. HP, dan status aktif yang dapat diubah. Role Nazir tidak bisa diganti menjadi petugas.</flux:text>
-        @elseif (! $userId)
-            <flux:text class="mt-1">Akun petugas langsung aktif dan terverifikasi. Akun Nazir dibuat sendiri oleh Nazir lewat registrasi.</flux:text>
-        @endif
-    </div>
+<div class="max-w-3xl space-y-6">
+    <x-admin.judul-halaman :judul="$userId ? 'Ubah Pengguna' : 'Tambah Petugas'" :kembali="route('admin.pengguna.index')" label-kembali="Kembali ke daftar pengguna"
+        :deskripsi="match (true) {
+            $modeNazir => 'Akun Nazir: hanya nama, email, No. HP, dan status aktif yang dapat diubah. Role Nazir tidak bisa diganti menjadi petugas.',
+            ! $userId => 'Akun petugas langsung aktif dan terverifikasi. Akun Nazir dibuat sendiri oleh Nazir lewat registrasi.',
+            default => null,
+        }" />
 
     <form wire:submit="simpan" class="kartu space-y-5 p-6">
         <div class="grid gap-4 sm:grid-cols-2">

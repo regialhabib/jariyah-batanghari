@@ -97,8 +97,8 @@ new #[Title('Kelola Panduan')] class extends Component {
                     <p class="mt-1 text-xs text-zinc-400">Urutan: {{ $langkah->urutan }}</p>
                 </div>
                 <div class="flex shrink-0 gap-1">
-                    <flux:button size="sm" variant="ghost" icon="pencil-square" wire:click="ubah({{ $langkah->id }})" aria-label="Ubah" />
-                    <flux:button size="sm" variant="ghost" icon="trash" class="text-red-600!" wire:click="hapus({{ $langkah->id }})"
+                    <flux:button size="sm" variant="ghost" icon="pencil-square" tooltip="Ubah" wire:click="ubah({{ $langkah->id }})" aria-label="Ubah" />
+                    <flux:button size="sm" variant="ghost" icon="trash" tooltip="Hapus" class="text-zinc-400! hover:bg-red-50! hover:text-red-600!" wire:click="hapus({{ $langkah->id }})"
                         wire:confirm="Hapus langkah &quot;{{ $langkah->judul }}&quot;?" aria-label="Hapus" />
                 </div>
             </div>

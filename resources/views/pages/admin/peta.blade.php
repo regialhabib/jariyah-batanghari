@@ -95,12 +95,9 @@ new #[Title('Peta Wakaf')] class extends Component {
 }; ?>
 
 <div class="space-y-6">
-    <div>
-        <flux:heading size="xl" level="1">Peta Wakaf</flux:heading>
-        <flux:text class="mt-1">Seluruh tanah wakaf dalam wilayah Anda, termasuk yang belum dipublikasikan.</flux:text>
-    </div>
+    <x-admin.judul-halaman judul="Peta Wakaf" deskripsi="Seluruh tanah wakaf dalam wilayah Anda, termasuk yang belum dipublikasikan." />
 
-    <div class="kartu flex flex-wrap items-end gap-3 p-5">
+    <div class="kartu flex flex-wrap items-end gap-3 p-4">
         <div class="w-full sm:w-56">
             <flux:select wire:model.live="kecamatan" label="Kecamatan">
                 <flux:select.option value="">Semua Kecamatan</flux:select.option>

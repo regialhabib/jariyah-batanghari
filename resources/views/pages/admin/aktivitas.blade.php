@@ -148,10 +148,7 @@ new #[Title('Log Aktivitas')] class extends Component {
 }; ?>
 
 <div class="space-y-6">
-    <div>
-        <flux:heading size="xl" level="1">Log Aktivitas</flux:heading>
-        <flux:text class="mt-1">Jejak audit: siapa mengubah apa dan kapan, beserta nilai lama → baru.</flux:text>
-    </div>
+    <x-admin.judul-halaman judul="Log Aktivitas" eyebrow="Administrasi" deskripsi="Jejak audit: siapa mengubah apa dan kapan, beserta nilai lama → baru." />
 
     <div class="kartu grid gap-3 p-4 sm:grid-cols-3">
         <flux:select wire:model.live="logName" aria-label="Filter jenis log">
@@ -175,35 +172,47 @@ new #[Title('Log Aktivitas')] class extends Component {
                     @if ($ev = $this::EVENT[$a->event] ?? null)
                         <flux:badge size="sm" :color="$ev[1]">{{ $ev[0] }}</flux:badge>
                     @endif
-                    <p class="font-medium text-primary-900">{{ $a->description }}</p>
+                    {{-- Log model bawaan hanya berisi nama event (created/updated/deleted); tampilkan nama subjeknya saja. --}}
+                    @php($deskripsiBawaan = array_key_exists($a->description, $this::EVENT))
+                    <p class="font-medium text-primary-900">{{ $deskripsiBawaan ? $this->labelSubjek($a) : $a->description }}</p>
                 </div>
                 <p class="text-xs text-zinc-500">
-                    {{ $this->labelSubjek($a) }}
-                    · oleh <span class="font-medium text-zinc-700">{{ $a->causer?->name ?? 'Sistem' }}</span>
+                    @unless ($deskripsiBawaan)
+                        {{ $this->labelSubjek($a) }} ·
+                    @endunless
+                    oleh <span class="font-medium text-zinc-700">{{ $a->causer?->name ?? 'Sistem' }}</span>
                     · <time datetime="{{ $a->created_at?->toIso8601String() }}" title="{{ $a->created_at?->translatedFormat('d F Y H:i:s') }}">{{ $a->created_at?->translatedFormat('d M Y, H:i') }}</time>
                 </p>
 
                 @if ($baris = $this->perubahan($a))
-                    <div class="overflow-x-auto rounded-lg border border-zinc-100">
-                        <table class="min-w-full text-xs">
-                            <thead class="bg-zinc-50 text-zinc-500">
-                                <tr>
-                                    <th class="px-3 py-1.5 text-start font-medium">Kolom</th>
-                                    <th class="px-3 py-1.5 text-start font-medium">Lama</th>
-                                    <th class="px-3 py-1.5 text-start font-medium">Baru</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-zinc-100">
-                                @foreach ($baris as [$kolom, $lama, $baru])
+                    {{-- Perubahan kecil langsung terbuka; data baru (banyak kolom) dilipat agar daftar tetap ringkas. --}}
+                    <details class="group" @if (count($baris) <= 4) open @endif>
+                        <summary class="inline-flex cursor-pointer list-none items-center gap-1 rounded text-xs font-medium text-primary-700 hover:underline [&::-webkit-details-marker]:hidden">
+                            <flux:icon.chevron-right variant="micro" class="size-4 transition group-open:rotate-90" />
+                            <span class="group-open:hidden">Lihat {{ count($baris) }} kolom</span>
+                            <span class="hidden group-open:inline">Sembunyikan {{ count($baris) }} kolom</span>
+                        </summary>
+                        <div class="mt-2 overflow-x-auto rounded-lg border border-zinc-100">
+                            <table class="min-w-full text-xs">
+                                <thead class="bg-zinc-50 text-zinc-500">
                                     <tr>
-                                        <td class="px-3 py-1.5 font-medium text-zinc-700">{{ $kolom }}</td>
-                                        <td class="px-3 py-1.5 break-all text-red-700">{{ $lama ?? '' }}</td>
-                                        <td class="px-3 py-1.5 break-all text-primary-700">{{ $baru ?? '' }}</td>
+                                        <th class="px-3 py-1.5 text-start font-medium">Kolom</th>
+                                        <th class="px-3 py-1.5 text-start font-medium">Lama</th>
+                                        <th class="px-3 py-1.5 text-start font-medium">Baru</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody class="divide-y divide-zinc-100">
+                                    @foreach ($baris as [$kolom, $lama, $baru])
+                                        <tr>
+                                            <td class="px-3 py-1.5 font-medium text-zinc-700">{{ $kolom }}</td>
+                                            <td class="px-3 py-1.5 break-all text-red-700">{{ $lama ?? '' }}</td>
+                                            <td class="px-3 py-1.5 break-all text-primary-700">{{ $baru ?? '' }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
                 @endif
             </article>
         @empty

@@ -255,118 +255,113 @@ new #[Title('Form Data Wakaf')] class extends Component {
 }; ?>
 
 <div class="space-y-6">
-    <div class="flex flex-wrap items-center justify-between gap-3">
-        <div>
-            <flux:heading size="xl" level="1">{{ $tanah ? 'Ubah' : 'Tambah' }} Data Wakaf</flux:heading>
-            @if ($tanah)
-                <flux:text class="mt-1">{{ $tanah->kode }} · {{ $tanah->nama }}</flux:text>
-            @endif
-        </div>
-        <flux:button variant="ghost" icon="arrow-left" :href="route('admin.tanah.index')" wire:navigate>Kembali</flux:button>
-    </div>
+    <x-admin.judul-halaman :judul="($tanah ? 'Ubah' : 'Tambah').' Data Wakaf'" :deskripsi="$tanah ? $tanah->kode.' · '.$tanah->nama : null"
+        :kembali="route('admin.tanah.index')" label-kembali="Kembali ke data wakaf" />
 
-    <form wire:submit="simpan" class="grid gap-6 xl:grid-cols-5">
-        <div class="space-y-6 xl:col-span-3">
-            <section class="kartu space-y-4 p-5">
-                <h2 class="font-semibold text-primary-900">Data Tanah</h2>
-                <flux:input wire:model="nama" label="Nama tanah wakaf / peruntukan" placeholder="Mis. Masjid Al-Ikhlas" required />
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <flux:select wire:model="jenis_penggunaan" label="Jenis penggunaan" required>
-                        <flux:select.option value="">Pilih jenis</flux:select.option>
-                        @foreach (JenisPenggunaan::opsi() as $nilai => $label)
-                            <flux:select.option value="{{ $nilai }}">{{ $label }}</flux:select.option>
+    <form wire:submit="simpan" class="space-y-6">
+        <div class="grid gap-6 xl:grid-cols-5">
+            <div class="space-y-6 xl:col-span-3">
+                <section class="kartu space-y-4 p-5">
+                    <h2 class="font-semibold text-primary-900">Data Tanah</h2>
+                    <flux:input wire:model="nama" label="Nama tanah wakaf / peruntukan" placeholder="Mis. Masjid Al-Ikhlas" required />
+                    <div class="grid gap-4 sm:grid-cols-2">
+                        <flux:select wire:model="jenis_penggunaan" label="Jenis penggunaan" required>
+                            <flux:select.option value="">Pilih jenis</flux:select.option>
+                            @foreach (JenisPenggunaan::opsi() as $nilai => $label)
+                                <flux:select.option value="{{ $nilai }}">{{ $label }}</flux:select.option>
+                            @endforeach
+                        </flux:select>
+                        <flux:input wire:model="luas_m2" label="Luas (m²)" type="number" step="0.01" min="1" required />
+                    </div>
+                    <div class="grid gap-4 sm:grid-cols-2">
+                        <flux:select wire:model.live="kecamatan_id" label="Kecamatan" required>
+                            <flux:select.option value="">Pilih kecamatan</flux:select.option>
+                            @foreach ($this->daftarKecamatan as $id => $nm)
+                                <flux:select.option value="{{ $id }}">{{ $nm }}</flux:select.option>
+                            @endforeach
+                        </flux:select>
+                        <flux:select wire:model="desa_id" label="Desa/Kelurahan" required :disabled="! $this->daftarDesa">
+                            <flux:select.option value="">Pilih desa/kelurahan</flux:select.option>
+                            @foreach ($this->daftarDesa as $id => $nm)
+                                <flux:select.option value="{{ $id }}">{{ $nm }}</flux:select.option>
+                            @endforeach
+                        </flux:select>
+                    </div>
+                    <flux:textarea wire:model="alamat" label="Alamat" rows="2" />
+                </section>
+
+                <section class="kartu space-y-4 p-5">
+                    <h2 class="font-semibold text-primary-900">Wakif &amp; Nazir</h2>
+                    <div class="grid gap-4 sm:grid-cols-2">
+                        <flux:input wire:model="wakif_nama" label="Nama wakif" required />
+                        <flux:input wire:model="wakif_nik" label="NIK wakif" inputmode="numeric" maxlength="16" placeholder="16 digit (opsional)" />
+                    </div>
+                    <flux:select wire:model.live="sumber_nazir" label="Data Nazir">
+                        <flux:select.option value="akun">Pilih akun Nazir terdaftar</flux:select.option>
+                        <flux:select.option value="teks">Tulis nama Nazir (belum punya akun)</flux:select.option>
+                    </flux:select>
+                    @if ($sumber_nazir === 'akun')
+                        <flux:select wire:model="nazir_id" label="Akun Nazir">
+                            <flux:select.option value="">Pilih Nazir</flux:select.option>
+                            @foreach ($this->daftarNazir as $id => $nm)
+                                <flux:select.option value="{{ $id }}">{{ $nm }}</flux:select.option>
+                            @endforeach
+                        </flux:select>
+                    @else
+                        <flux:input wire:model="nama_nazir" label="Nama Nazir" placeholder="Opsional" />
+                    @endif
+                </section>
+
+                <section class="kartu space-y-4 p-5">
+                    <h2 class="font-semibold text-primary-900">Legalitas</h2>
+                    <flux:select wire:model.live="status_sertifikat" label="Status sertifikat" required>
+                        @foreach (StatusSertifikat::cases() as $s)
+                            <flux:select.option value="{{ $s->value }}">{{ $s->label() }}</flux:select.option>
                         @endforeach
                     </flux:select>
-                    <flux:input wire:model="luas_m2" label="Luas (m²)" type="number" step="0.01" min="1" required />
-                </div>
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <flux:select wire:model.live="kecamatan_id" label="Kecamatan" required>
-                        <flux:select.option value="">Pilih kecamatan</flux:select.option>
-                        @foreach ($this->daftarKecamatan as $id => $nm)
-                            <flux:select.option value="{{ $id }}">{{ $nm }}</flux:select.option>
-                        @endforeach
-                    </flux:select>
-                    <flux:select wire:model="desa_id" label="Desa/Kelurahan" required :disabled="! $this->daftarDesa">
-                        <flux:select.option value="">Pilih desa/kelurahan</flux:select.option>
-                        @foreach ($this->daftarDesa as $id => $nm)
-                            <flux:select.option value="{{ $id }}">{{ $nm }}</flux:select.option>
-                        @endforeach
-                    </flux:select>
-                </div>
-                <flux:textarea wire:model="alamat" label="Alamat" rows="2" />
-            </section>
+                    <div class="grid gap-4 sm:grid-cols-2">
+                        <flux:input wire:model="nomor_aiw" label="Nomor AIW" />
+                        <flux:input wire:model="tanggal_aiw" label="Tanggal AIW" type="date" />
+                        <flux:input wire:model="nomor_sertifikat" label="Nomor sertifikat" />
+                        <flux:input wire:model="tanggal_sertifikat" label="Tanggal sertifikat" type="date" />
+                    </div>
+                    <flux:switch wire:model="is_published" label="Tampilkan di peta & halaman publik" />
+                </section>
+            </div>
 
-            <section class="kartu space-y-4 p-5">
-                <h2 class="font-semibold text-primary-900">Wakif &amp; Nazir</h2>
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <flux:input wire:model="wakif_nama" label="Nama wakif" required />
-                    <flux:input wire:model="wakif_nik" label="NIK wakif" inputmode="numeric" maxlength="16" placeholder="16 digit (opsional)" />
-                </div>
-                <flux:select wire:model.live="sumber_nazir" label="Data Nazir">
-                    <flux:select.option value="akun">Pilih akun Nazir terdaftar</flux:select.option>
-                    <flux:select.option value="teks">Tulis nama Nazir (belum punya akun)</flux:select.option>
-                </flux:select>
-                @if ($sumber_nazir === 'akun')
-                    <flux:select wire:model="nazir_id" label="Akun Nazir">
-                        <flux:select.option value="">Pilih Nazir</flux:select.option>
-                        @foreach ($this->daftarNazir as $id => $nm)
-                            <flux:select.option value="{{ $id }}">{{ $nm }}</flux:select.option>
-                        @endforeach
-                    </flux:select>
-                @else
-                    <flux:input wire:model="nama_nazir" label="Nama Nazir" placeholder="Opsional" />
-                @endif
-            </section>
+            <div class="space-y-6 xl:col-span-2">
+                <section class="kartu space-y-4 p-5">
+                    <h2 class="font-semibold text-primary-900">Lokasi</h2>
+                    <flux:field>
+                        <flux:label>Titik lokasi &amp; batas bidang</flux:label>
+                        <x-peta-pilih lat="latitude" lng="longitude" batas="batas_geojson" />
+                        <flux:error name="latitude" />
+                        <flux:error name="batas_geojson" />
+                    </flux:field>
+                    <div class="grid grid-cols-2 gap-3">
+                        <flux:input wire:model="latitude" label="Latitude" type="number" step="any" />
+                        <flux:input wire:model="longitude" label="Longitude" type="number" step="any" />
+                    </div>
+                </section>
 
-            <section class="kartu space-y-4 p-5">
-                <h2 class="font-semibold text-primary-900">Legalitas</h2>
-                <flux:select wire:model.live="status_sertifikat" label="Status sertifikat" required>
-                    @foreach (StatusSertifikat::cases() as $s)
-                        <flux:select.option value="{{ $s->value }}">{{ $s->label() }}</flux:select.option>
-                    @endforeach
-                </flux:select>
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <flux:input wire:model="nomor_aiw" label="Nomor AIW" />
-                    <flux:input wire:model="tanggal_aiw" label="Tanggal AIW" type="date" />
-                    <flux:input wire:model="nomor_sertifikat" label="Nomor sertifikat" />
-                    <flux:input wire:model="tanggal_sertifikat" label="Tanggal sertifikat" type="date" />
-                </div>
-                <flux:switch wire:model="is_published" label="Tampilkan di peta & halaman publik" />
-            </section>
-        </div>
-
-        <div class="space-y-6 xl:col-span-2">
-            <section class="kartu space-y-4 p-5">
-                <h2 class="font-semibold text-primary-900">Lokasi</h2>
-                <flux:field>
-                    <flux:label>Titik lokasi &amp; batas bidang</flux:label>
-                    <x-peta-pilih lat="latitude" lng="longitude" batas="batas_geojson" />
-                    <flux:error name="latitude" />
-                    <flux:error name="batas_geojson" />
-                </flux:field>
-                <div class="grid grid-cols-2 gap-3">
-                    <flux:input wire:model="latitude" label="Latitude" type="number" step="any" />
-                    <flux:input wire:model="longitude" label="Longitude" type="number" step="any" />
-                </div>
-            </section>
-
-            <section class="kartu space-y-4 p-5">
-                <h2 class="font-semibold text-primary-900">Foto</h2>
-                @if ($foto && ! $errors->has('foto'))
-                    <img src="{{ $foto->temporaryUrl() }}" alt="Pratinjau foto" class="h-40 w-full rounded-xl object-cover">
-                @elseif ($tanah?->foto && ! $hapus_foto)
-                    <img src="{{ $tanah->fotoUrl() }}" alt="Foto {{ $tanah->nama }}" class="h-40 w-full rounded-xl object-cover">
-                @endif
-                <flux:input type="file" wire:model="foto" accept=".jpg,.jpeg,.png,.webp" label="Unggah foto" description="JPG, PNG, atau WebP, maksimal 2 MB." />
-                @if ($tanah?->foto)
-                    <flux:checkbox wire:model.live="hapus_foto" label="Hapus foto saat ini" />
-                @endif
-            </section>
-
-            <div class="flex justify-end gap-2">
-                <flux:button variant="ghost" :href="route('admin.tanah.index')" wire:navigate>Batal</flux:button>
-                <flux:button type="submit" variant="primary" icon="check">Simpan</flux:button>
+                <section class="kartu space-y-4 p-5">
+                    <h2 class="font-semibold text-primary-900">Foto</h2>
+                    @if ($foto && ! $errors->has('foto'))
+                        <img src="{{ $foto->temporaryUrl() }}" alt="Pratinjau foto" class="h-40 w-full rounded-xl object-cover">
+                    @elseif ($tanah?->foto && ! $hapus_foto)
+                        <img src="{{ $tanah->fotoUrl() }}" alt="Foto {{ $tanah->nama }}" class="h-40 w-full rounded-xl object-cover">
+                    @endif
+                    <x-admin.unggah-berkas wire:model="foto" accept=".jpg,.jpeg,.png,.webp" label="Unggah foto" keterangan="JPG, PNG, atau WebP, maksimal 2 MB." />
+                    @if ($tanah?->foto)
+                        <flux:checkbox wire:model.live="hapus_foto" label="Hapus foto saat ini" />
+                    @endif
+                </section>
             </div>
         </div>
+
+        <x-admin.bilah-simpan>
+            <flux:button variant="ghost" :href="route('admin.tanah.index')" wire:navigate>Batal</flux:button>
+            <flux:button type="submit" variant="primary" icon="check">Simpan</flux:button>
+        </x-admin.bilah-simpan>
     </form>
 </div>

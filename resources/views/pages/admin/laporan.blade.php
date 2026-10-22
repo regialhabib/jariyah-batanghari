@@ -93,18 +93,12 @@ new #[Title('Laporan')] class extends Component {
 }; ?>
 
 <div class="space-y-6">
-    <div class="flex flex-wrap items-end justify-between gap-3">
-        <div>
-            <flux:heading size="xl" level="1">Laporan</flux:heading>
-            <flux:text class="mt-1">{{ implode(' · ', $this->filter->uraian()) }}</flux:text>
-        </div>
+    <x-admin.judul-halaman judul="Laporan" :deskripsi="implode(' · ', $this->filter->uraian())">
         @can('laporan.ekspor')
-            <div class="flex flex-wrap gap-2">
-                <flux:button icon="table-cells" :href="route('admin.laporan.excel', $kueri)">Ekspor Excel</flux:button>
-                <flux:button variant="primary" icon="document-arrow-down" :href="route('admin.laporan.pdf', $kueri)" target="_blank">Ekspor PDF</flux:button>
-            </div>
+            <flux:button icon="table-cells" :href="route('admin.laporan.excel', $kueri)">Ekspor Excel</flux:button>
+            <flux:button variant="primary" icon="document-arrow-down" :href="route('admin.laporan.pdf', $kueri)" target="_blank">Ekspor PDF</flux:button>
         @endcan
-    </div>
+    </x-admin.judul-halaman>
 
     <div class="kartu grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-6">
         @if (auth()->user()->isKua())

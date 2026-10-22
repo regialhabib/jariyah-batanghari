@@ -115,8 +115,8 @@ new #[Title('Kelola FAQ')] class extends Component {
                     {{ $faq->is_published ? 'Terbit' : 'Draf' }}
                 </button>
                 <div class="flex shrink-0 gap-1">
-                    <flux:button size="sm" variant="ghost" icon="pencil-square" wire:click="ubah({{ $faq->id }})" aria-label="Ubah" />
-                    <flux:button size="sm" variant="ghost" icon="trash" class="text-red-600!" wire:click="hapus({{ $faq->id }})"
+                    <flux:button size="sm" variant="ghost" icon="pencil-square" tooltip="Ubah" wire:click="ubah({{ $faq->id }})" aria-label="Ubah" />
+                    <flux:button size="sm" variant="ghost" icon="trash" tooltip="Hapus" class="text-zinc-400! hover:bg-red-50! hover:text-red-600!" wire:click="hapus({{ $faq->id }})"
                         wire:confirm="Hapus FAQ ini?" aria-label="Hapus" />
                 </div>
             </div>

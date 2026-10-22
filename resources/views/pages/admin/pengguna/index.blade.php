@@ -95,13 +95,9 @@ new #[Title('Pengguna')] class extends Component {
 }; ?>
 
 <div class="space-y-6">
-    <div class="flex flex-wrap items-end justify-between gap-3">
-        <div>
-            <flux:heading size="xl" level="1">Pengguna</flux:heading>
-            <flux:text class="mt-1">Akun petugas (Admin BPN, Petugas BPN, Petugas KUA) dan Nazir.</flux:text>
-        </div>
+    <x-admin.judul-halaman judul="Pengguna" eyebrow="Administrasi" deskripsi="Akun petugas (Admin BPN, Petugas BPN, Petugas KUA) dan Nazir.">
         <flux:button variant="primary" icon="user-plus" :href="route('admin.pengguna.create')" wire:navigate>Tambah Petugas</flux:button>
-    </div>
+    </x-admin.judul-halaman>
 
     <div class="kartu grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-5">
         <div class="lg:col-span-2">
