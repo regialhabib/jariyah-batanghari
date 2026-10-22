@@ -170,7 +170,7 @@ new #[Title('Laporan')] class extends Component {
         <div class="border-b border-primary-100 px-5 py-3">
             <flux:heading size="lg">Rekap per Kecamatan</flux:heading>
         </div>
-        <flux:table class="[&_td]:px-3 [&_th]:px-3">
+        <flux:table>
             <flux:table.columns>
                 <flux:table.column>Kecamatan</flux:table.column>
                 <flux:table.column align="end">Sudah</flux:table.column>
@@ -201,7 +201,7 @@ new #[Title('Laporan')] class extends Component {
         @if ($tanahs->isEmpty())
             <x-empty-state icon="map-pin" title="Tidak ada data" description="Tidak ada tanah wakaf sesuai filter." />
         @else
-            <flux:table :paginate="$tanahs" class="[&_td]:px-3 [&_th]:px-3">
+            <flux:table :paginate="$tanahs">
                 <flux:table.columns>
                     <flux:table.column>Kode</flux:table.column>
                     <flux:table.column>Nama</flux:table.column>

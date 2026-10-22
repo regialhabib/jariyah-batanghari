@@ -9,6 +9,7 @@ Format: tanggal, apa yang diputuskan atau diubah, dan alasannya. Entri terbaru d
 - **Log Aktivitas lebih ringkas:** tabel perubahan dilipat bila lebih dari 4 kolom (mis. data baru), dan deskripsi bawaan `created/updated/deleted` diganti nama subjek (jenisnya sudah tampil di badge).
 - **Form panjang** (Data Wakaf, Pengaturan Situs) memakai `<x-admin.bilah-simpan>` yang menempel di bawah layar.
 - Paginasi: "Menampilkan 1 kepada 10" → "1 sampai 10" (`lang/id.json`).
+- **Tabel di dalam kartu tidak lagi menempel ke tepi.** Bawaan Flux membuat sel pertama/terakhir tanpa padding (`first:ps-0 last:pe-0`), dan override per halaman (`[&_td]:px-3`) kalah oleh aturan itu. Kini satu aturan CSS di `app.css` (`.kartu [data-flux-cell]`) memberi jarak 1,25rem (sama dengan `p-5`), judul kolom berlatar tipis, dan paginasi ikut berjarak. Pembungkus yang tidak seragam (`p-5`, `px-4 pb-4`, `overflow-x-auto`) dihapus agar semua tabel memakai pola yang sama.
 
 ## 2026-10-22 (Fase 8: audit akses & end-to-end)
 - **`PastikanRole` dan `verified` didaftarkan sebagai persistent middleware Livewire** (`AppServiceProvider`). *Alasan:* aksi Livewire dikirim ke `/livewire/update`, bukan ke rute halaman, sehingga middleware buatan sendiri tidak ikut dijalankan ulang. Sebelumnya pembatas role hanya berlaku saat halaman dibuka; aksi tetap aman karena dicek Policy/`can:`, tetapi kini dibatasi di dua lapis.

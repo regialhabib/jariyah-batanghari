@@ -155,7 +155,7 @@ new #[Title('Kelola Unduhan')] class extends Component {
         @if ($this->unduhans->isEmpty())
             <x-empty-state icon="arrow-down-tray" title="Belum ada dokumen unduhan" />
         @else
-            <flux:table class="[&_td]:px-3 [&_th]:px-3">
+            <flux:table>
                 <flux:table.columns>
                     <flux:table.column class="w-16">Urutan</flux:table.column>
                     <flux:table.column>Dokumen</flux:table.column>

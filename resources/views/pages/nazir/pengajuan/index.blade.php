@@ -117,51 +117,49 @@ new #[Title('Pengajuan')] class extends Component {
                 <flux:button :href="route('nazir.pengajuan.create')" wire:navigate variant="primary" icon="plus" class="mt-2">Buat Pengajuan</flux:button>
             </x-empty-state>
         @else
-            <div class="px-4 pb-4 sm:px-5">
-                <flux:table :paginate="$this->pengajuans">
-                    <flux:table.columns>
-                        <flux:table.column>Nomor</flux:table.column>
-                        <flux:table.column>Jenis</flux:table.column>
-                        <flux:table.column>Tanah Wakaf</flux:table.column>
-                        <flux:table.column>Status</flux:table.column>
-                        <flux:table.column>Tanggal</flux:table.column>
-                        <flux:table.column align="end">Aksi</flux:table.column>
-                    </flux:table.columns>
-                    <flux:table.rows>
-                        @foreach ($this->pengajuans as $p)
-                            <flux:table.row :key="$p->id" @class(['bg-amber-50/60' => $p->status === \App\Enums\StatusPengajuan::PerluPerbaikan])>
-                                <flux:table.cell class="font-medium text-primary-900">
-                                    {{ $p->nomor ?? 'Draf' }}
-                                </flux:table.cell>
-                                <flux:table.cell>{{ $p->jenis->labelSingkat() }}</flux:table.cell>
-                                <flux:table.cell>
-                                    <p class="font-medium text-primary-900">{{ $p->tanahWakaf?->nama }}</p>
-                                    <p class="text-xs text-zinc-500">{{ $p->tanahWakaf?->desa?->nama }}, {{ $p->tanahWakaf?->desa?->kecamatan?->nama }}</p>
-                                </flux:table.cell>
-                                <flux:table.cell><x-badge-status :status="$p->status" /></flux:table.cell>
-                                <flux:table.cell class="text-sm">
-                                    @if ($p->diajukan_at)
-                                        <p>Diajukan {{ $p->diajukan_at->locale('id')->translatedFormat('j M Y') }}</p>
-                                    @else
-                                        <p>Dibuat {{ $p->created_at->locale('id')->translatedFormat('j M Y') }}</p>
-                                    @endif
-                                    @if ($p->selesai_at)
-                                        <p class="text-xs text-zinc-500">Selesai {{ $p->selesai_at->locale('id')->translatedFormat('j M Y') }}</p>
-                                    @endif
-                                </flux:table.cell>
-                                <flux:table.cell align="end">
-                                    <div class="flex justify-end gap-1">
-                                        <flux:button size="sm" variant="ghost" icon="eye" :href="route('nazir.pengajuan.show', $p)" wire:navigate>Detail</flux:button>
-                                        @can('delete', $p)
-                                            <flux:button size="sm" variant="ghost" icon="trash" class="text-red-600!" wire:click="konfirmasiHapus({{ $p->id }})">Hapus</flux:button>
-                                        @endcan
-                                    </div>
-                                </flux:table.cell>
-                            </flux:table.row>
-                        @endforeach
-                    </flux:table.rows>
-                </flux:table>
-            </div>
+            <flux:table :paginate="$this->pengajuans">
+                <flux:table.columns>
+                    <flux:table.column>Nomor</flux:table.column>
+                    <flux:table.column>Jenis</flux:table.column>
+                    <flux:table.column>Tanah Wakaf</flux:table.column>
+                    <flux:table.column>Status</flux:table.column>
+                    <flux:table.column>Tanggal</flux:table.column>
+                    <flux:table.column align="end">Aksi</flux:table.column>
+                </flux:table.columns>
+                <flux:table.rows>
+                    @foreach ($this->pengajuans as $p)
+                        <flux:table.row :key="$p->id" @class(['bg-amber-50/60' => $p->status === \App\Enums\StatusPengajuan::PerluPerbaikan])>
+                            <flux:table.cell class="font-medium text-primary-900">
+                                {{ $p->nomor ?? 'Draf' }}
+                            </flux:table.cell>
+                            <flux:table.cell>{{ $p->jenis->labelSingkat() }}</flux:table.cell>
+                            <flux:table.cell>
+                                <p class="font-medium text-primary-900">{{ $p->tanahWakaf?->nama }}</p>
+                                <p class="text-xs text-zinc-500">{{ $p->tanahWakaf?->desa?->nama }}, {{ $p->tanahWakaf?->desa?->kecamatan?->nama }}</p>
+                            </flux:table.cell>
+                            <flux:table.cell><x-badge-status :status="$p->status" /></flux:table.cell>
+                            <flux:table.cell class="text-sm">
+                                @if ($p->diajukan_at)
+                                    <p>Diajukan {{ $p->diajukan_at->locale('id')->translatedFormat('j M Y') }}</p>
+                                @else
+                                    <p>Dibuat {{ $p->created_at->locale('id')->translatedFormat('j M Y') }}</p>
+                                @endif
+                                @if ($p->selesai_at)
+                                    <p class="text-xs text-zinc-500">Selesai {{ $p->selesai_at->locale('id')->translatedFormat('j M Y') }}</p>
+                                @endif
+                            </flux:table.cell>
+                            <flux:table.cell align="end">
+                                <div class="flex justify-end gap-1">
+                                    <flux:button size="sm" variant="ghost" icon="eye" :href="route('nazir.pengajuan.show', $p)" wire:navigate>Detail</flux:button>
+                                    @can('delete', $p)
+                                        <flux:button size="sm" variant="ghost" icon="trash" class="text-red-600!" wire:click="konfirmasiHapus({{ $p->id }})">Hapus</flux:button>
+                                    @endcan
+                                </div>
+                            </flux:table.cell>
+                        </flux:table.row>
+                    @endforeach
+                </flux:table.rows>
+            </flux:table>
         @endif
     </div>
 

@@ -79,6 +79,27 @@
     @apply  !mb-0 !leading-tight;
 }
 
+/*
+ * Tabel Flux di dalam .kartu. Bawaan Flux membuat sel pertama/terakhir tanpa padding (first:ps-0 last:pe-0)
+ * sehingga isi tabel menempel ke tepi kartu. Di sini diberi jarak yang sama dengan padding kartu (p-5),
+ * dan baris judul kolom diberi latar tipis. Sengaja di luar @layer agar menang dari utilitas Flux.
+ */
+.kartu :is([data-flux-column], [data-flux-cell]):first-child {
+    padding-inline-start: 1.25rem;
+}
+
+.kartu :is([data-flux-column], [data-flux-cell]):last-child {
+    padding-inline-end: 1.25rem;
+}
+
+.kartu [data-flux-column] {
+    @apply bg-zinc-50/80 py-2.5 text-xs font-semibold tracking-wide text-zinc-500 uppercase;
+}
+
+.kartu [data-flux-pagination] {
+    @apply px-5 pb-3;
+}
+
 input:focus[data-flux-control],
 textarea:focus[data-flux-control],
 select:focus[data-flux-control] {

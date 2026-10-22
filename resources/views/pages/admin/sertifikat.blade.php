@@ -114,8 +114,8 @@ new #[Title('Sertifikat')] class extends Component {
         @endif
     </section>
 
-    <section class="kartu p-5" aria-labelledby="judul-terbit">
-        <div class="flex flex-wrap items-center justify-between gap-3">
+    <section class="kartu overflow-hidden" aria-labelledby="judul-terbit">
+        <div class="flex flex-wrap items-center justify-between gap-3 px-5 pt-5">
             <h2 id="judul-terbit" class="font-semibold text-primary-900">Tanah Wakaf Bersertifikat</h2>
             <div class="grid w-full gap-3 sm:w-auto sm:grid-cols-2">
                 <flux:input wire:model.live.debounce.400ms="q" icon="magnifying-glass" placeholder="Cari nama, kode, atau nomor..." maxlength="100" aria-label="Cari" />
@@ -131,7 +131,7 @@ new #[Title('Sertifikat')] class extends Component {
         @if ($this->tanahs->isEmpty())
             <x-empty-state icon="shield-check" title="Belum ada tanah bersertifikat" description="Tidak ada data yang sesuai dengan pencarian." />
         @else
-            <div class="mt-4 overflow-x-auto">
+            <div class="mt-4">
                 <flux:table :paginate="$this->tanahs">
                     <flux:table.columns>
                         <flux:table.column>Kode</flux:table.column>

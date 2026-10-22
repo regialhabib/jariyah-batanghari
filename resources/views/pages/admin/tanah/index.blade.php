@@ -218,58 +218,56 @@ new #[Title('Data Wakaf')] class extends Component {
         </div>
     </div>
 
-    <div class="kartu overflow-hidden p-5">
+    <div class="kartu overflow-hidden">
         @if ($this->tanahs->isEmpty())
             <x-empty-state icon="map-pin" title="Belum ada data tanah wakaf" description="Tidak ada data yang sesuai dengan filter." />
         @else
-            <div class="overflow-x-auto">
-                <flux:table :paginate="$this->tanahs">
-                    <flux:table.columns>
-                        <flux:table.column>Kode</flux:table.column>
-                        <flux:table.column>Nama Tanah Wakaf</flux:table.column>
-                        <flux:table.column>Lokasi</flux:table.column>
-                        <flux:table.column>Luas</flux:table.column>
-                        <flux:table.column>Status</flux:table.column>
-                        <flux:table.column>Publikasi</flux:table.column>
-                        <flux:table.column align="end">Aksi</flux:table.column>
-                    </flux:table.columns>
-                    <flux:table.rows>
-                        @foreach ($this->tanahs as $tanah)
-                            <flux:table.row :key="$tanah->id">
-                                <flux:table.cell class="font-mono text-xs">{{ $tanah->kode }}</flux:table.cell>
-                                <flux:table.cell>
-                                    <p class="font-medium text-zinc-800">{{ $tanah->nama }}</p>
-                                    <p class="text-xs text-zinc-500">{{ $tanah->jenis_penggunaan->label() }} · Wakif: {{ $tanah->wakif_nama }}</p>
-                                </flux:table.cell>
-                                <flux:table.cell>
-                                    <p>{{ $tanah->desa?->nama }}</p>
-                                    <p class="text-xs text-zinc-500">{{ $tanah->desa?->kecamatan?->nama }}</p>
-                                </flux:table.cell>
-                                <flux:table.cell>{{ format_luas($tanah->luas_m2) }}</flux:table.cell>
-                                <flux:table.cell><x-badge-status :status="$tanah->status_sertifikat" /></flux:table.cell>
-                                <flux:table.cell>
-                                    @if ($tanah->is_published)
-                                        <flux:badge size="sm" color="green">Terbit</flux:badge>
-                                    @else
-                                        <flux:badge size="sm" color="zinc">Belum</flux:badge>
-                                    @endif
-                                </flux:table.cell>
-                                <flux:table.cell align="end">
-                                    <div class="flex justify-end gap-1">
-                                        <flux:button size="sm" variant="ghost" icon="eye" tooltip="Detail" wire:click="lihat({{ $tanah->id }})" aria-label="Detail {{ $tanah->nama }}" />
-                                        @can('update', $tanah)
-                                            <flux:button size="sm" variant="ghost" icon="pencil-square" tooltip="Ubah" :href="route('admin.tanah.edit', $tanah)" wire:navigate aria-label="Ubah {{ $tanah->nama }}" />
-                                        @endcan
-                                        @can('delete', $tanah)
-                                            <flux:button size="sm" variant="ghost" icon="trash" tooltip="Hapus" class="text-zinc-400! hover:bg-red-50! hover:text-red-600!" wire:click="konfirmasiHapus({{ $tanah->id }})" aria-label="Hapus {{ $tanah->nama }}" />
-                                        @endcan
-                                    </div>
-                                </flux:table.cell>
-                            </flux:table.row>
-                        @endforeach
-                    </flux:table.rows>
-                </flux:table>
-            </div>
+            <flux:table :paginate="$this->tanahs">
+                <flux:table.columns>
+                    <flux:table.column>Kode</flux:table.column>
+                    <flux:table.column>Nama Tanah Wakaf</flux:table.column>
+                    <flux:table.column>Lokasi</flux:table.column>
+                    <flux:table.column>Luas</flux:table.column>
+                    <flux:table.column>Status</flux:table.column>
+                    <flux:table.column>Publikasi</flux:table.column>
+                    <flux:table.column align="end">Aksi</flux:table.column>
+                </flux:table.columns>
+                <flux:table.rows>
+                    @foreach ($this->tanahs as $tanah)
+                        <flux:table.row :key="$tanah->id">
+                            <flux:table.cell class="font-mono text-xs">{{ $tanah->kode }}</flux:table.cell>
+                            <flux:table.cell>
+                                <p class="font-medium text-zinc-800">{{ $tanah->nama }}</p>
+                                <p class="text-xs text-zinc-500">{{ $tanah->jenis_penggunaan->label() }} · Wakif: {{ $tanah->wakif_nama }}</p>
+                            </flux:table.cell>
+                            <flux:table.cell>
+                                <p>{{ $tanah->desa?->nama }}</p>
+                                <p class="text-xs text-zinc-500">{{ $tanah->desa?->kecamatan?->nama }}</p>
+                            </flux:table.cell>
+                            <flux:table.cell>{{ format_luas($tanah->luas_m2) }}</flux:table.cell>
+                            <flux:table.cell><x-badge-status :status="$tanah->status_sertifikat" /></flux:table.cell>
+                            <flux:table.cell>
+                                @if ($tanah->is_published)
+                                    <flux:badge size="sm" color="green">Terbit</flux:badge>
+                                @else
+                                    <flux:badge size="sm" color="zinc">Belum</flux:badge>
+                                @endif
+                            </flux:table.cell>
+                            <flux:table.cell align="end">
+                                <div class="flex justify-end gap-1">
+                                    <flux:button size="sm" variant="ghost" icon="eye" tooltip="Detail" wire:click="lihat({{ $tanah->id }})" aria-label="Detail {{ $tanah->nama }}" />
+                                    @can('update', $tanah)
+                                        <flux:button size="sm" variant="ghost" icon="pencil-square" tooltip="Ubah" :href="route('admin.tanah.edit', $tanah)" wire:navigate aria-label="Ubah {{ $tanah->nama }}" />
+                                    @endcan
+                                    @can('delete', $tanah)
+                                        <flux:button size="sm" variant="ghost" icon="trash" tooltip="Hapus" class="text-zinc-400! hover:bg-red-50! hover:text-red-600!" wire:click="konfirmasiHapus({{ $tanah->id }})" aria-label="Hapus {{ $tanah->nama }}" />
+                                    @endcan
+                                </div>
+                            </flux:table.cell>
+                        </flux:table.row>
+                    @endforeach
+                </flux:table.rows>
+            </flux:table>
         @endif
     </div>
 

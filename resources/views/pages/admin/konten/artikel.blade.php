@@ -170,7 +170,7 @@ new #[Title('Kelola Artikel')] class extends Component {
         @if ($this->artikels->isEmpty())
             <x-empty-state icon="newspaper" title="Belum ada artikel" description="Tambahkan artikel pertama untuk halaman Informasi Wakaf." />
         @else
-            <flux:table class="[&_td]:px-3 [&_th]:px-3">
+            <flux:table>
                 <flux:table.columns>
                     <flux:table.column class="w-24">Urutan</flux:table.column>
                     <flux:table.column>Artikel</flux:table.column>

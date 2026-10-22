@@ -169,8 +169,8 @@ new #[Title('Pengajuan')] class extends Component {
         </flux:select>
     </div>
 
-    <div class="kartu overflow-hidden p-5">
-        <div class="mb-3 flex items-center justify-between text-sm text-zinc-600">
+    <div class="kartu overflow-hidden">
+        <div class="flex items-center justify-between border-b border-zinc-100 px-5 py-2.5 text-sm text-zinc-600">
             <span>{{ number_format($this->pengajuans->total(), 0, ',', '.') }} pengajuan</span>
             <flux:button size="sm" variant="ghost" wire:click="resetFilter">Reset filter</flux:button>
         </div>
@@ -178,39 +178,37 @@ new #[Title('Pengajuan')] class extends Component {
         @if ($this->pengajuans->isEmpty())
             <x-empty-state icon="clipboard-document-list" title="Tidak ada pengajuan" description="Belum ada pengajuan yang sesuai dengan filter." />
         @else
-            <div class="overflow-x-auto">
-                <flux:table :paginate="$this->pengajuans">
-                    <flux:table.columns>
-                        <flux:table.column>Nomor</flux:table.column>
-                        <flux:table.column>Tanah Wakaf</flux:table.column>
-                        <flux:table.column>Jenis</flux:table.column>
-                        <flux:table.column>Nazir</flux:table.column>
-                        <flux:table.column>Tanggal</flux:table.column>
-                        <flux:table.column>Status</flux:table.column>
-                        <flux:table.column align="end">Aksi</flux:table.column>
-                    </flux:table.columns>
-                    <flux:table.rows>
-                        @foreach ($this->pengajuans as $p)
-                            <flux:table.row :key="$p->id">
-                                <flux:table.cell class="font-mono text-xs">{{ $p->nomor ?? '-' }}</flux:table.cell>
-                                <flux:table.cell>
-                                    <p class="font-medium text-zinc-800">{{ $p->tanahWakaf->nama }}</p>
-                                    <p class="text-xs text-zinc-500">{{ $p->tanahWakaf->desa?->nama }}, {{ $p->tanahWakaf->desa?->kecamatan?->nama }}</p>
-                                </flux:table.cell>
-                                <flux:table.cell>{{ $p->jenis->labelSingkat() }}</flux:table.cell>
-                                <flux:table.cell>{{ $p->nazir->name }}</flux:table.cell>
-                                <flux:table.cell>{{ $p->diajukan_at?->locale('id')->translatedFormat('j M Y') ?? '-' }}</flux:table.cell>
-                                <flux:table.cell><x-badge-status :status="$p->status" /></flux:table.cell>
-                                <flux:table.cell align="end">
-                                    <flux:button size="sm" :variant="$tab === 'periksa' ? 'primary' : 'ghost'" :href="route('admin.pengajuan.show', $p)" wire:navigate>
-                                        {{ $tab === 'periksa' ? 'Periksa' : 'Detail' }}
-                                    </flux:button>
-                                </flux:table.cell>
-                            </flux:table.row>
-                        @endforeach
-                    </flux:table.rows>
-                </flux:table>
-            </div>
+            <flux:table :paginate="$this->pengajuans">
+                <flux:table.columns>
+                    <flux:table.column>Nomor</flux:table.column>
+                    <flux:table.column>Tanah Wakaf</flux:table.column>
+                    <flux:table.column>Jenis</flux:table.column>
+                    <flux:table.column>Nazir</flux:table.column>
+                    <flux:table.column>Tanggal</flux:table.column>
+                    <flux:table.column>Status</flux:table.column>
+                    <flux:table.column align="end">Aksi</flux:table.column>
+                </flux:table.columns>
+                <flux:table.rows>
+                    @foreach ($this->pengajuans as $p)
+                        <flux:table.row :key="$p->id">
+                            <flux:table.cell class="font-mono text-xs">{{ $p->nomor ?? '-' }}</flux:table.cell>
+                            <flux:table.cell>
+                                <p class="font-medium text-zinc-800">{{ $p->tanahWakaf->nama }}</p>
+                                <p class="text-xs text-zinc-500">{{ $p->tanahWakaf->desa?->nama }}, {{ $p->tanahWakaf->desa?->kecamatan?->nama }}</p>
+                            </flux:table.cell>
+                            <flux:table.cell>{{ $p->jenis->labelSingkat() }}</flux:table.cell>
+                            <flux:table.cell>{{ $p->nazir->name }}</flux:table.cell>
+                            <flux:table.cell>{{ $p->diajukan_at?->locale('id')->translatedFormat('j M Y') ?? '-' }}</flux:table.cell>
+                            <flux:table.cell><x-badge-status :status="$p->status" /></flux:table.cell>
+                            <flux:table.cell align="end">
+                                <flux:button size="sm" :variant="$tab === 'periksa' ? 'primary' : 'ghost'" :href="route('admin.pengajuan.show', $p)" wire:navigate>
+                                    {{ $tab === 'periksa' ? 'Periksa' : 'Detail' }}
+                                </flux:button>
+                            </flux:table.cell>
+                        </flux:table.row>
+                    @endforeach
+                </flux:table.rows>
+            </flux:table>
         @endif
     </div>
 </div>

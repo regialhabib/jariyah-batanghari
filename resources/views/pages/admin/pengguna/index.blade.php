@@ -128,7 +128,7 @@ new #[Title('Pengguna')] class extends Component {
                 <flux:button size="sm" variant="ghost" wire:click="resetFilter">Reset filter</flux:button>
             </x-empty-state>
         @else
-            <flux:table :paginate="$this->pengguna" class="[&_td]:px-3 [&_th]:px-3">
+            <flux:table :paginate="$this->pengguna">
                 <flux:table.columns>
                     <flux:table.column>Nama</flux:table.column>
                     <flux:table.column>Role</flux:table.column>
