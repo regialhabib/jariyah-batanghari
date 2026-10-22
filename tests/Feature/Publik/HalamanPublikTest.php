@@ -172,7 +172,7 @@ class HalamanPublikTest extends TestCase
             ->assertOk()
             ->assertSee(setting('alamat'))
             ->assertSee('(0743) 21045')
-            ->assertSee('jariyah@batanghari.go.id')
+            ->assertSee('kab-batanghari@atrbpn.go.id')
             ->assertSee('Senin – Jumat (08.00 – 16.00 WIB)')
             ->assertSee('Kirim Pesan')
             ->assertSee('Kontak Nazir')
