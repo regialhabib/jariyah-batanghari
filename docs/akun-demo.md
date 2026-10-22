@@ -30,7 +30,18 @@ KUA mengesahkan pengajuan AIW dan hanya melihat data kecamatannya sendiri.
 | Muara Tembesi | `kua.muaratembesi@jariyah.test` | `kuamuaratembesi` |
 | Pemayung | `kua.pemayung@jariyah.test` | `kuapemayung` |
 
-Saran: pakai **KUA Maro Sebo Ulu** atau **KUA Bajubang**, karena pengajuan milik Nazir demo (Ahmad) ada di kecamatan tersebut.
+Saran: pakai **KUA Maro Sebo Ulu**. Pengajuan AIW demo yang menunggu pemeriksaan ada di kecamatan ini.
+
+## Pengajuan demo yang bisa langsung diperiksa
+
+Semua dokumen persyaratan sudah terlampir (PDF contoh) dan berstatus *Menunggu Pemeriksaan*.
+
+| Nomor | Jenis | Pemeriksa | Login sebagai |
+|---|---|---|---|
+| JRY-2026-0002 | Sertifikat (tanah belum bersertifikat) | BPN | `bpn@jariyah.test` atau `admin@jariyah.test` |
+| JRY-2026-0004 | Pembuatan AIW | KUA Maro Sebo Ulu | `kua.maroseboulu@jariyah.test` |
+
+Buka **Pengajuan → Perlu Diperiksa**, tandai setiap dokumen **Valid**, lalu tombol **Verifikasi** (BPN) atau **Sahkan AIW** (KUA) aktif. JRY-2026-0001 dan 0003 sudah selesai (sertifikat terbit), jadi hanya bisa dilihat.
 
 ## Nazir
 

@@ -2,6 +2,10 @@
 
 Format: tanggal, apa yang diputuskan atau diubah, dan alasannya. Entri terbaru di atas.
 
+## 2026-10-22 (Data demo pengajuan)
+- **Pengajuan demo kini punya dokumen persyaratan** (PDF contoh di disk privat). *Alasan:* sebelumnya seeder membuat pengajuan berstatus Diajukan tanpa dokumen, padahal tombol Verifikasi/Sahkan AIW baru aktif setelah semua dokumen persyaratan ditandai valid, sehingga tombol itu tidak pernah bisa dipakai di data demo. Pengajuan yang sudah terbit diberi dokumen berstatus Valid.
+- **Ditambah 1 pengajuan AIW yang menunggu KUA** (Masjid Al-Falah, Kec. Maro Sebo Ulu) agar alur KUA bisa dicoba. Jumlah tanah acak dikurangi satu, jadi total tetap 125 bidang (90 bersertifikat).
+
 ## 2026-10-22 (Pemolesan UI/UX area admin)
 - **Judul halaman admin diseragamkan** lewat `<x-admin.judul-halaman>`: tautan kembali selalu di atas judul (sebelumnya ada yang berupa tombol di kanan), tombol aksi selalu di kanan. Form pengguna tidak lagi di tengah, rata kiri seperti form lain.
 - **Input berkas bawaan peramban diganti `<x-admin.unggah-berkas>`.** *Alasan:* teks "Choose file / No file chosen" mengikuti bahasa peramban (Inggris) dan tidak bisa diterjemahkan. Komponen baru menampilkan nama berkas, menerima seret-lepas, dan menunjukkan progres unggah.
