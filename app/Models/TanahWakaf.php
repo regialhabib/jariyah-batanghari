@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
+use InvalidArgumentException;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 
@@ -96,6 +97,28 @@ class TanahWakaf extends Model
         $urut = $terakhir ? ((int) substr($terakhir, -4)) + 1 : 1;
 
         return $prefix.sprintf('%04d', $urut);
+    }
+
+    /**
+     * Tanah lain yang sudah memakai nomor AIW/sertifikat ini (tanpa beda huruf besar-kecil dan spasi di tepi).
+     *
+     * @param  'nomor_aiw'|'nomor_sertifikat'  $kolom
+     */
+    public static function pemakaiNomor(string $kolom, string $nomor, ?int $kecualiId = null): ?self
+    {
+        if (! in_array($kolom, ['nomor_aiw', 'nomor_sertifikat'], true)) {
+            throw new InvalidArgumentException("Kolom nomor tidak dikenal: {$kolom}");
+        }
+
+        $nomor = mb_strtolower(trim($nomor));
+        if ($nomor === '') {
+            return null;
+        }
+
+        return static::query()
+            ->whereRaw("LOWER(TRIM({$kolom})) = ?", [$nomor])
+            ->when($kecualiId, fn (Builder $q) => $q->whereKeyNot($kecualiId))
+            ->first(['id', 'kode', 'nama']);
     }
 
     /**

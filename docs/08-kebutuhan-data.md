@@ -21,3 +21,5 @@ Pengembangan memakai **data contoh/placeholder** lebih dulu. Daftar di bawah per
 Kolom: `nama`, `kecamatan`, `desa`, `alamat`, `luas_m2`, `jenis_penggunaan`, `wakif_nama`, `nama_nazir`, `status_sertifikat`, `nomor_aiw`, `tanggal_aiw`, `nomor_sertifikat`, `tanggal_sertifikat`, `latitude`, `longitude`.
 
 File template bisa diunduh dari halaman Admin → Data Wakaf → Impor.
+
+`nomor_aiw` dan `nomor_sertifikat` harus unik. Baris yang nomornya sudah dipakai tanah lain di database, atau sama dengan baris sebelumnya di berkas yang sama, ditandai galat dan tidak diimpor. Perbandingan tidak membedakan huruf besar-kecil.

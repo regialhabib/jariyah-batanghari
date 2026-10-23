@@ -62,8 +62,8 @@ Role cukup satu kolom karena setiap akun hanya punya satu role dan daftar hak ti
 | luas_m2 | decimal(12,2) | |
 | jenis_penggunaan | string (enum) | |
 | status_sertifikat | string (enum) default `belum` | |
-| nomor_aiw, tanggal_aiw | string/date nullable | |
-| nomor_sertifikat, tanggal_sertifikat | string/date nullable | |
+| nomor_aiw, tanggal_aiw | string/date nullable | `nomor_aiw` **unik**. Diisi manual dari dokumen resmi |
+| nomor_sertifikat, tanggal_sertifikat | string/date nullable | `nomor_sertifikat` **unik**. Diisi manual dari dokumen resmi |
 | latitude, longitude | decimal(10,7) | Wajib |
 | batas_geojson | json nullable | Polygon GeoJSON |
 | foto | string nullable | Path di disk publik |

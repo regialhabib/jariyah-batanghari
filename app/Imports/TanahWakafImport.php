@@ -57,9 +57,18 @@ class TanahWakafImport implements SkipsEmptyRows, ToCollection, WithHeadingRow
      */
     private array $desas = [];
 
+    /**
+     * Nomor AIW/sertifikat yang sudah terpakai: di database ("TW-01-0001 · Nama") atau di baris
+     * sebelumnya dalam berkas yang sama ("baris 5"). Kunci = nomor huruf kecil.
+     *
+     * @var array<'nomor_aiw'|'nomor_sertifikat', array<string, string>>|null
+     */
+    private ?array $nomorTerpakai = null;
+
     public function collection(Collection $rows): void
     {
         $this->hasil = [];
+        $this->nomorTerpakai = null;
 
         if ($rows->isEmpty()) {
             return;
@@ -224,6 +233,12 @@ class TanahWakafImport implements SkipsEmptyRows, ToCollection, WithHeadingRow
             }
         }
 
+        foreach (['nomor_aiw' => 'Nomor AIW', 'nomor_sertifikat' => 'Nomor sertifikat'] as $kolom => $label) {
+            if ($pemakai = $this->pemakaiNomor($kolom, $teks($kolom), $nomorBaris)) {
+                $galat[] = "{$label} \"{$teks($kolom)}\" sudah dipakai oleh {$pemakai}.";
+            }
+        }
+
         $lat = $this->angka($row['latitude'] ?? null);
         $lng = $this->angka($row['longitude'] ?? null);
         if ($lat === null || $lat < -90 || $lat > 90) {
@@ -251,6 +266,34 @@ class TanahWakafImport implements SkipsEmptyRows, ToCollection, WithHeadingRow
         ];
 
         return ['baris' => $nomorBaris, 'nama' => $nama, 'data' => $data, 'galat' => $galat];
+    }
+
+    /**
+     * Siapa yang sudah memakai nomor ini, atau null bila belum terpakai. Nomor yang lolos dicatat
+     * agar baris berikutnya dengan nomor yang sama ditandai ganda.
+     *
+     * @param  'nomor_aiw'|'nomor_sertifikat'  $kolom
+     */
+    private function pemakaiNomor(string $kolom, string $nomor, int $nomorBaris): ?string
+    {
+        $kunci = mb_strtolower($nomor);
+        if ($kunci === '') {
+            return null;
+        }
+
+        $this->nomorTerpakai ??= collect(['nomor_aiw', 'nomor_sertifikat'])
+            ->mapWithKeys(fn (string $k) => [$k => TanahWakaf::query()->whereNotNull($k)->get(['kode', 'nama', $k])
+                ->mapWithKeys(fn (TanahWakaf $t) => [mb_strtolower(trim((string) $t->{$k})) => "{$t->kode} · {$t->nama}"])
+                ->all()])
+            ->all();
+
+        if (isset($this->nomorTerpakai[$kolom][$kunci])) {
+            return $this->nomorTerpakai[$kolom][$kunci];
+        }
+
+        $this->nomorTerpakai[$kolom][$kunci] = "baris {$nomorBaris} di berkas ini";
+
+        return null;
     }
 
     private function normal(string $nama, string $awalan = ''): string

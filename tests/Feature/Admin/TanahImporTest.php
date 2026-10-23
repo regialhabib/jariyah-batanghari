@@ -101,6 +101,31 @@ class TanahImporTest extends TestCase
         $this->assertSame(StatusSertifikat::Belum, $makam->status_sertifikat);
     }
 
+    public function test_impor_menandai_nomor_yang_sudah_ada_dan_nomor_ganda_dalam_berkas(): void
+    {
+        $lama = TanahWakaf::factory()->create(['nama' => 'Masjid Lama', 'nomor_aiw' => 'W.2/1/2015']);
+        $baris = fn (string $nama, string $aiw, string $sertifikat) => [
+            $nama, 'Muara Bulian', 'Rambahan', '', '300', 'masjid', 'Wakif', '', $sertifikat ? 'sudah' : 'belum',
+            $aiw, '', $sertifikat, '', '-1.7', '103.2',
+        ];
+
+        $this->actingAs($this->bpn);
+        Livewire::test('pages::admin.tanah.impor')
+            ->set('berkas', $this->csv([
+                $baris('Sama Dengan Database', 'w.2/1/2015', ''),
+                $baris('Pertama', 'W.2/9/2020', '10.04.09'),
+                $baris('Sertifikat Ganda', 'W.2/10/2020', '10.04.09'),
+            ]))
+            ->call('periksa')
+            ->assertSet('ringkasan', ['total' => 3, 'valid' => 1, 'galat' => 2])
+            ->assertSee("Nomor AIW &quot;w.2/1/2015&quot; sudah dipakai oleh {$lama->kode} · Masjid Lama.", false)
+            ->assertSee('Nomor sertifikat &quot;10.04.09&quot; sudah dipakai oleh baris 3 di berkas ini.', false)
+            ->call('impor')
+            ->assertSet('jumlahDiimpor', 1);
+
+        $this->assertTrue(TanahWakaf::query()->where('nama', 'Pertama')->exists());
+    }
+
     public function test_impor_xlsx(): void
     {
         $sheet = new Spreadsheet;

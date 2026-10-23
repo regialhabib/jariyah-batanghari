@@ -2,6 +2,14 @@
 
 Format: tanggal, apa yang diputuskan atau diubah, dan alasannya. Entri terbaru di atas.
 
+## 2026-10-23 (Nomor AIW & sertifikat tidak boleh ganda)
+- **Nomor AIW dan nomor sertifikat kini unik.** *Alasan:* keduanya nomor resmi dari dokumen fisik dan diisi manual, sehingga salah ketik bisa membuat dua tanah memakai nomor yang sama tanpa ketahuan.
+- Satu aturan `App\Rules\NomorBelumDipakai` (memakai `TanahWakaf::pemakaiNomor()`) dipakai di modal **Sahkan AIW**, modal **Catat Sertifikat Terbit**, form **Data Wakaf**, dan di `PengajuanWorkflow` sebagai sumber kebenaran alur. Pesan galat menyebut kode dan nama tanah pemilik nomor. Perbandingan tidak membedakan huruf besar-kecil dan spasi di tepi; nomor disimpan dalam bentuk yang sudah dirapikan.
+- **Impor Excel** menandai baris yang nomornya sudah ada di database atau sama dengan baris sebelumnya di berkas yang sama.
+- **Indeks unik di database** (`tanah_wakafs.nomor_aiw`, `nomor_sertifikat`) sebagai lapisan terakhir bila dua petugas menyimpan nomor sama bersamaan. Kolom tetap nullable. Data yang ada sudah diperiksa: tidak ada nomor ganda.
+- Factory memakai nomor acak unik agar seeder dan test tidak bentrok dengan indeks baru.
+- Nomor tetap **diisi manual**, tidak dibuat otomatis oleh sistem.
+
 ## 2026-10-22 (Data demo pengajuan)
 - **Pengajuan demo kini punya dokumen persyaratan** (PDF contoh di disk privat). *Alasan:* sebelumnya seeder membuat pengajuan berstatus Diajukan tanpa dokumen, padahal tombol Verifikasi/Sahkan AIW baru aktif setelah semua dokumen persyaratan ditandai valid, sehingga tombol itu tidak pernah bisa dipakai di data demo. Pengajuan yang sudah terbit diberi dokumen berstatus Valid.
 - **Ditambah 1 pengajuan AIW yang menunggu KUA** (Masjid Al-Falah, Kec. Maro Sebo Ulu) agar alur KUA bisa dicoba. Jumlah tanah acak dikurangi satu, jadi total tetap 125 bidang (90 bersertifikat).

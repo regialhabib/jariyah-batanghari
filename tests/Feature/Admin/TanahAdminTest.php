@@ -192,6 +192,31 @@ class TanahAdminTest extends TestCase
         Storage::disk('public')->assertExists($tanah->foto);
     }
 
+    public function test_form_menolak_nomor_milik_tanah_lain_tetapi_boleh_nomor_sendiri(): void
+    {
+        $bpn = User::factory()->bpn()->create();
+        TanahWakaf::factory()->bersertifikat()->create(['desa_id' => $this->desa->id, 'nomor_aiw' => 'W.2/1/2020', 'nomor_sertifikat' => '10.04.01']);
+        $tanah = TanahWakaf::factory()->bersertifikat()->create(['desa_id' => $this->desa->id, 'nomor_aiw' => 'W.2/2/2020', 'nomor_sertifikat' => '10.04.02']);
+
+        $this->actingAs($bpn);
+        $komponen = Livewire::test('pages::admin.tanah.form', ['tanah' => $tanah])
+            ->set('nomor_aiw', 'W.2/1/2020')
+            ->set('nomor_sertifikat', '10.04.01')
+            ->call('simpan')
+            ->assertHasErrors(['nomor_aiw', 'nomor_sertifikat']);
+
+        $this->assertSame('W.2/2/2020', $tanah->refresh()->nomor_aiw);
+
+        // Menyimpan ulang dengan nomornya sendiri tidak dianggap ganda.
+        $komponen->set('nomor_aiw', 'W.2/2/2020')
+            ->set('nomor_sertifikat', '10.04.02')
+            ->set('nama', 'Nama Diubah')
+            ->call('simpan')
+            ->assertHasNoErrors();
+
+        $this->assertSame('Nama Diubah', $tanah->refresh()->nama);
+    }
+
     public function test_peta_admin_memuat_tanah_belum_terbit_dalam_cakupan(): void
     {
         $kua = User::factory()->kua($this->kecamatan)->create();

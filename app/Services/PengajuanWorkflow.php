@@ -15,6 +15,7 @@ use App\Models\TanahWakaf;
 use App\Models\User;
 use App\Notifications\PengajuanMasuk;
 use App\Notifications\StatusPengajuanBerubah;
+use App\Rules\NomorBelumDipakai;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -244,6 +246,7 @@ class PengajuanWorkflow
     public function sahkanAiw(Pengajuan $pengajuan, User $kua, string $nomorAiw, DateTimeInterface $tanggalAiw, ?UploadedFile $scan = null, ?string $catatan = null): void
     {
         $this->pastikanSemuaDokumenValid($pengajuan);
+        $nomorAiw = $this->pastikanNomorBelumDipakai($pengajuan->tanahWakaf, 'nomor_aiw', $nomorAiw, 'nomor AIW');
 
         DB::transaction(function () use ($pengajuan, $kua, $nomorAiw, $tanggalAiw, $scan, $catatan) {
             $pengajuan->tanahWakaf->update([
@@ -275,6 +278,8 @@ class PengajuanWorkflow
      */
     public function terbitkanSertifikat(Pengajuan $pengajuan, User $bpn, string $nomorSertifikat, DateTimeInterface $tanggal, ?UploadedFile $scan = null, ?string $catatan = null): void
     {
+        $nomorSertifikat = $this->pastikanNomorBelumDipakai($pengajuan->tanahWakaf, 'nomor_sertifikat', $nomorSertifikat, 'nomor sertifikat');
+
         DB::transaction(function () use ($pengajuan, $bpn, $nomorSertifikat, $tanggal, $scan, $catatan) {
             $pengajuan->tanahWakaf->update([
                 'status_sertifikat' => StatusSertifikat::Sudah,
@@ -379,6 +384,23 @@ class PengajuanWorkflow
         if ($aktifLain) {
             throw ValidationException::withMessages(['status' => 'Tanah ini masih punya pengajuan yang sedang diproses.']);
         }
+    }
+
+    /**
+     * Tolak nomor AIW/sertifikat yang sudah dipakai tanah lain. Mengembalikan nomor yang sudah dirapikan.
+     *
+     * @param  'nomor_aiw'|'nomor_sertifikat'  $kolom
+     */
+    private function pastikanNomorBelumDipakai(TanahWakaf $tanah, string $kolom, string $nomor, string $label): string
+    {
+        Validator::make(
+            [$kolom => $nomor],
+            [$kolom => ['required', 'string', 'max:100', new NomorBelumDipakai($kolom, $tanah->id)]],
+            [],
+            [$kolom => $label],
+        )->validate();
+
+        return trim($nomor);
     }
 
     private function pastikanSemuaDokumenValid(Pengajuan $pengajuan): void

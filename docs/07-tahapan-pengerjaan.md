@@ -118,12 +118,7 @@ Fase 0 dan 1 adalah **fondasi** dan dikerjakan berurutan oleh satu pelaksana (su
 - [x] Tabel di dalam kartu tidak menempel ke tepi
 - [x] Data demo: pengajuan diberi dokumen contoh + pengajuan AIW untuk KUA ([akun-demo.md](akun-demo.md))
 - [x] Pemeriksaan dokumen: tombol Valid/Tidak Valid berwarna + progres pemeriksaan
+- [x] Nomor AIW dan nomor sertifikat tidak bisa ganda: validasi di modal Sahkan AIW, modal Catat Sertifikat Terbit, `PengajuanWorkflow`, form Data Wakaf, dan Impor Excel (termasuk ganda di dalam satu berkas), ditambah indeks unik di database. Nomor tetap diisi manual ([CHANGELOG](CHANGELOG.md))
 
 ## Berikutnya (belum dikerjakan)
-- [ ] **Cegah nomor sertifikat dan nomor AIW ganda.** Saat ini `PengajuanWorkflow::sahkanAiw()` dan `terbitkanSertifikat()` (dipanggil dari `resources/views/pages/admin/pengajuan/show.blade.php`) hanya memvalidasi `required|string|max:100`, jadi nomor yang sudah dipakai tanah lain tetap tersimpan bila petugas salah ketik. Yang perlu dibuat:
-  - Validasi unik di form modal **Sahkan AIW** (`nomorAiw` vs `tanah_wakafs.nomor_aiw`) dan **Catat Sertifikat Terbit** (`nomorSertifikat` vs `tanah_wakafs.nomor_sertifikat`), dengan pesan galat berbahasa Indonesia yang menyebut tanah pemilik nomor tersebut.
-  - Cek yang sama di `PengajuanWorkflow` (sumber kebenaran alur), karena form bukan satu-satunya jalan masuk.
-  - Form **Data Wakaf** (`admin/tanah/form`) dan **Impor Excel** juga mengisi kedua kolom ini, jadi ikut divalidasi; impor menandai baris ganda sebagai galat.
-  - Pertimbangkan indeks unik di database (kolom nullable, jadi nilai kosong tetap boleh banyak). Periksa dulu data yang ada agar migrasi tidak gagal.
-  - Test: nomor ganda ditolak di tiap jalan masuk; nomor milik tanah yang sedang diubah sendiri tetap boleh.
-  - Nomor tetap **diisi manual** oleh petugas (nomor resmi dari dokumen fisik), bukan dibuat otomatis.
+Tidak ada tugas pengembangan terbuka. Yang tersisa adalah data dari kantor ([08-kebutuhan-data.md](08-kebutuhan-data.md)) dan daftar periksa go-live ([10-deploy.md](10-deploy.md)).

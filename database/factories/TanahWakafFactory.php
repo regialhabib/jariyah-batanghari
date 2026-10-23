@@ -32,7 +32,7 @@ class TanahWakafFactory extends Factory
             'luas_m2' => fake()->numberBetween(200, 5000),
             'jenis_penggunaan' => $jenis,
             'status_sertifikat' => StatusSertifikat::Belum,
-            'nomor_aiw' => 'W.2/'.fake()->numberBetween(1, 300).'/'.fake()->year(),
+            'nomor_aiw' => 'W.2/'.fake()->unique()->numberBetween(1, 99999).'/'.fake()->year(),
             'tanggal_aiw' => fake()->dateTimeBetween('-10 years', '-1 month'),
             'latitude' => fake()->latitude(-1.95, -1.45),
             'longitude' => fake()->longitude(102.95, 103.50),
@@ -58,7 +58,7 @@ class TanahWakafFactory extends Factory
     {
         return $this->state(fn () => [
             'status_sertifikat' => StatusSertifikat::Sudah,
-            'nomor_sertifikat' => '10.04.'.fake()->numerify('##.##.#.#####'),
+            'nomor_sertifikat' => '10.04.'.fake()->unique()->numerify('##.##.#.#####'),
             'tanggal_sertifikat' => fake()->dateTimeBetween('-5 years', 'now'),
         ]);
     }

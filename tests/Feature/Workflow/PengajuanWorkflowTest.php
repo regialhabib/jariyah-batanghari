@@ -187,6 +187,46 @@ class PengajuanWorkflowTest extends TestCase
         $this->workflow->terbitkanSertifikat($pengajuan, $this->bpn, 'X', now());
     }
 
+    public function test_nomor_aiw_yang_sudah_dipakai_tanah_lain_ditolak(): void
+    {
+        TanahWakaf::factory()->create(['desa_id' => $this->desa->id, 'nomor_aiw' => 'W.2/77/2026']);
+        $pengajuan = $this->draftAiwTerkirim();
+        $this->validasiSemua($pengajuan, $this->kua);
+
+        try {
+            // Beda huruf besar-kecil dan spasi tetap dianggap nomor yang sama.
+            $this->workflow->sahkanAiw($pengajuan, $this->kua, ' w.2/77/2026 ', now());
+            $this->fail('Nomor AIW ganda seharusnya ditolak.');
+        } catch (ValidationException $e) {
+            $this->assertArrayHasKey('nomor_aiw', $e->errors());
+        }
+        $this->assertSame(StatusPengajuan::Diajukan, $pengajuan->refresh()->status);
+
+        $this->workflow->sahkanAiw($pengajuan, $this->kua, ' W.2/78/2026 ', now());
+        $this->assertSame('W.2/78/2026', $pengajuan->refresh()->tanahWakaf->nomor_aiw);
+    }
+
+    public function test_nomor_sertifikat_yang_sudah_dipakai_tanah_lain_ditolak(): void
+    {
+        TanahWakaf::factory()->bersertifikat()->create(['desa_id' => $this->desa->id, 'nomor_sertifikat' => '10.04.01.02.1.00001']);
+        $tanah = TanahWakaf::factory()->milik($this->nazir)->create(['desa_id' => $this->desa->id]);
+        $pengajuan = $this->workflow->buatDraf($this->nazir, JenisPengajuan::SertifikatBelum, $tanah);
+        $this->unggahSemua($pengajuan);
+        $this->workflow->kirim($pengajuan, $this->nazir);
+        $this->validasiSemua($pengajuan, $this->bpn);
+        $this->workflow->verifikasi($pengajuan, $this->bpn);
+
+        try {
+            $this->workflow->terbitkanSertifikat($pengajuan, $this->bpn, '10.04.01.02.1.00001', now());
+            $this->fail('Nomor sertifikat ganda seharusnya ditolak.');
+        } catch (ValidationException $e) {
+            $this->assertArrayHasKey('nomor_sertifikat', $e->errors());
+        }
+
+        $this->assertSame(StatusPengajuan::Terverifikasi, $pengajuan->refresh()->status);
+        $this->assertNull($tanah->refresh()->nomor_sertifikat);
+    }
+
     public function test_sertifikat_butuh_aiw_dan_tanah_milik_sendiri(): void
     {
         $tanpaAiw = TanahWakaf::factory()->milik($this->nazir)->tanpaAiw()->create(['desa_id' => $this->desa->id]);

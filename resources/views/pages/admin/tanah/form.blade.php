@@ -7,6 +7,7 @@ use App\Models\Desa;
 use App\Models\Kecamatan;
 use App\Models\TanahWakaf;
 use App\Models\User;
+use App\Rules\NomorBelumDipakai;
 use Flux\Flux;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -152,9 +153,9 @@ new #[Title('Form Data Wakaf')] class extends Component {
             'alamat' => ['nullable', 'string', 'max:1000'],
             'luas_m2' => ['required', 'numeric', 'min:1', 'max:9999999999'],
             'status_sertifikat' => ['required', Rule::enum(StatusSertifikat::class)],
-            'nomor_aiw' => ['nullable', 'string', 'max:100'],
+            'nomor_aiw' => ['nullable', 'string', 'max:100', new NomorBelumDipakai('nomor_aiw', $this->tanah?->id)],
             'tanggal_aiw' => ['nullable', 'date', 'before_or_equal:today'],
-            'nomor_sertifikat' => ['nullable', 'required_if:status_sertifikat,sudah', 'string', 'max:100'],
+            'nomor_sertifikat' => ['nullable', 'required_if:status_sertifikat,sudah', 'string', 'max:100', new NomorBelumDipakai('nomor_sertifikat', $this->tanah?->id)],
             'tanggal_sertifikat' => ['nullable', 'date', 'before_or_equal:today'],
             'is_published' => ['boolean'],
             'foto' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
@@ -220,9 +221,9 @@ new #[Title('Form Data Wakaf')] class extends Component {
             'alamat' => $v['alamat'] ?: null,
             'luas_m2' => $v['luas_m2'],
             'status_sertifikat' => $v['status_sertifikat'],
-            'nomor_aiw' => $v['nomor_aiw'] ?: null,
+            'nomor_aiw' => trim($v['nomor_aiw']) ?: null,
             'tanggal_aiw' => $v['tanggal_aiw'] ?: null,
-            'nomor_sertifikat' => $v['nomor_sertifikat'] ?: null,
+            'nomor_sertifikat' => trim($v['nomor_sertifikat']) ?: null,
             'tanggal_sertifikat' => $v['tanggal_sertifikat'] ?: null,
             'is_published' => (bool) $v['is_published'],
             'latitude' => $v['latitude'],

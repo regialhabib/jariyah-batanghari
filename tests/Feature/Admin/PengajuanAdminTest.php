@@ -265,6 +265,41 @@ class PengajuanAdminTest extends TestCase
         $this->assertTrue($pengajuan->dokumens()->where('kategori', KategoriDokumen::HasilSertifikat->value)->exists());
     }
 
+    public function test_nomor_aiw_ganda_ditolak_di_modal_sahkan_aiw(): void
+    {
+        $lain = TanahWakaf::factory()->create(['desa_id' => $this->desa->id, 'nama' => 'Masjid Pemilik Nomor', 'nomor_aiw' => 'W.2/10/2026']);
+        $pengajuan = $this->aiwTerkirim();
+        $this->validasiSemua($pengajuan, $this->kua);
+        $this->actingAs($this->kua);
+
+        Livewire::test('pages::admin.pengajuan.show', ['pengajuan' => $pengajuan])
+            ->set('nomorAiw', 'W.2/10/2026')
+            ->set('tanggalAiw', now()->format('Y-m-d'))
+            ->call('sahkanAiw')
+            ->assertHasErrors('nomorAiw')
+            ->assertSee("Nomor AIW ini sudah dipakai oleh {$lain->kode} · Masjid Pemilik Nomor.");
+
+        $this->assertSame(StatusPengajuan::Diajukan, $pengajuan->refresh()->status);
+        $this->assertNull($pengajuan->tanahWakaf->nomor_aiw);
+    }
+
+    public function test_nomor_sertifikat_ganda_ditolak_di_modal_sertifikat_terbit(): void
+    {
+        TanahWakaf::factory()->bersertifikat()->create(['desa_id' => $this->desa->id, 'nomor_sertifikat' => '10.04.01.02.1.00099']);
+        $pengajuan = $this->sertifikatTerkirim();
+        $this->validasiSemua($pengajuan, $this->bpn);
+        $this->workflow->verifikasi($pengajuan, $this->bpn);
+        $this->actingAs($this->bpn);
+
+        Livewire::test('pages::admin.pengajuan.show', ['pengajuan' => $pengajuan->refresh()])
+            ->set('nomorSertifikat', '10.04.01.02.1.00099')
+            ->set('tanggalSertifikat', now()->format('Y-m-d'))
+            ->call('terbitkanSertifikat')
+            ->assertHasErrors('nomorSertifikat');
+
+        $this->assertSame(StatusPengajuan::Terverifikasi, $pengajuan->refresh()->status);
+    }
+
     public function test_bpn_menolak_pengajuan_dengan_alasan(): void
     {
         $pengajuan = $this->sertifikatTerkirim();

@@ -5,6 +5,7 @@ use App\Enums\KategoriDokumen;
 use App\Enums\StatusPengajuan;
 use App\Enums\StatusValidasiDokumen;
 use App\Models\Pengajuan;
+use App\Rules\NomorBelumDipakai;
 use App\Services\PengajuanWorkflow;
 use Carbon\CarbonImmutable;
 use Flux\Flux;
@@ -135,7 +136,7 @@ new #[Title('Pemeriksaan Pengajuan')] class extends Component {
     {
         $this->pemeriksaan();
         $this->validate([
-            'nomorAiw' => ['required', 'string', 'max:100'],
+            'nomorAiw' => ['required', 'string', 'max:100', new NomorBelumDipakai('nomor_aiw', $this->pengajuan->tanah_wakaf_id)],
             'tanggalAiw' => ['required', 'date', 'before_or_equal:today'],
             'scanAiw' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
             'catatanAiw' => ['nullable', 'string', 'max:2000'],
@@ -167,7 +168,7 @@ new #[Title('Pemeriksaan Pengajuan')] class extends Component {
     {
         $this->pemeriksaan();
         $this->validate([
-            'nomorSertifikat' => ['required', 'string', 'max:100'],
+            'nomorSertifikat' => ['required', 'string', 'max:100', new NomorBelumDipakai('nomor_sertifikat', $this->pengajuan->tanah_wakaf_id)],
             'tanggalSertifikat' => ['required', 'date', 'before_or_equal:today'],
             'scanSertifikat' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
             'catatanSertifikat' => ['nullable', 'string', 'max:2000'],
@@ -201,7 +202,7 @@ new #[Title('Pemeriksaan Pengajuan')] class extends Component {
         $tgl = fn ($d) => $d?->locale('id')->translatedFormat('j F Y');
         $nik = $tanah->wakif_nik ? str_repeat('•', max(strlen($tanah->wakif_nik) - 4, 0)).substr($tanah->wakif_nik, -4) : null;
         $petaUrl = $user->can('update', $tanah) ? route('admin.tanah.edit', $tanah) : null;
-        $galatAlur = collect(['dokumen', 'status', 'catatan'])->flatMap(fn ($k) => $errors->get($k));
+        $galatAlur = collect(['dokumen', 'status', 'catatan', 'nomor_aiw', 'nomor_sertifikat'])->flatMap(fn ($k) => $errors->get($k));
     @endphp
 
     <x-admin.judul-halaman judul="Pemeriksaan Pengajuan" :kembali="route('admin.pengajuan.index')" label-kembali="Kembali ke daftar pengajuan">
