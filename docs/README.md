@@ -39,6 +39,25 @@ Folder ini adalah sumber kebenaran untuk rancangan, keputusan, dan progres proye
 | Laporan | Tampil di layar + ekspor Excel (.xlsx) dan PDF |
 | Bahasa | Antarmuka berbahasa Indonesia. Nama tabel/kolom domain memakai istilah Indonesia (`tanah_wakafs`, `pengajuans`), kode umum mengikuti konvensi Laravel. |
 
+## Branch Git
+
+| Branch | Isi | Kegunaan |
+|---|---|---|
+| `main` | Kode aplikasi saja. `docs/` dan file AI environment diabaikan di `.gitignore`. | Versi bersih yang dibagikan/di-deploy. |
+| `with-docs` | Kode + `docs/` + file AI environment (`AGENTS.md`, `CLAUDE.md`, `.claude/`, `.cursor/`, `.agents/`, `.codex/`, `.mcp.json`, `boost.json`). | Branch kerja sehari-hari bersama agent AI. |
+
+Aturan:
+
+1. **Arah merge hanya `main` → `with-docs`.** Jangan merge, rebase, atau cherry-pick `with-docs` ke `main`; `docs/` dan file AI akan ikut masuk.
+2. Perubahan kode di-commit di `main`, lalu dibawa ke `with-docs`:
+   ```
+   git switch with-docs
+   git merge main
+   ```
+3. Perubahan `docs/` dan file AI hanya di-commit di `with-docs`.
+4. Konflik `.gitignore` saat merge: pertahankan versi `with-docs` (tanpa entri docs/AI; yang tetap diabaikan hanya `/.claude/settings.local.json` karena berisi pengaturan lokal).
+5. Saat pindah ke `main`, `docs/` dan file AI hilang dari disk karena tidak tercatat di branch itu; berkasnya kembali saat pindah ke `with-docs`. Untuk bekerja di `main` sambil tetap membaca docs, buka `main` di worktree terpisah: `git worktree add ../jariyah-main main`.
+
 ## Lingkungan pengembangan
 
 | Komponen | Versi | Catatan |

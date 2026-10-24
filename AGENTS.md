@@ -164,3 +164,15 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 - Run `vendor/bin/phpunit` to call the test runner directly. It accepts the same file path and `--filter=testName` arguments.
 
 </laravel-boost-guidelines>
+
+# Branch Git (Jariyah Batang Hari)
+
+Repo ini punya dua branch dengan isi berbeda. Detail lengkap ada di `docs/README.md` bagian "Branch Git".
+
+- `main`: hanya kode aplikasi. `docs/` dan file AI environment (`AGENTS.md`, `CLAUDE.md`, `.claude/`, `.cursor/`, `.agents/`, `.codex/`, `.mcp.json`, `boost.json`) diabaikan lewat `.gitignore`.
+- `with-docs`: kode + `docs/` + file AI environment. Ini branch kerja sehari-hari.
+- Arah merge **hanya** `main` → `with-docs`. **Jangan pernah** merge, rebase, atau cherry-pick `with-docs` ke `main`, karena `docs/` dan file AI akan ikut masuk ke `main`.
+- Perubahan kode dikerjakan dan di-commit di `main`, lalu dibawa ke `with-docs` dengan `git switch with-docs` + `git merge main`. Perubahan `docs/` atau file AI hanya di-commit di `with-docs`.
+- Bila konflik di `.gitignore` saat merge, pertahankan versi `with-docs` (tanpa entri docs/AI, kecuali `/.claude/settings.local.json`).
+- Pindah ke `main` membuat `docs/` dan file AI hilang dari disk (muncul lagi saat kembali ke `with-docs`). Untuk membaca docs sambil bekerja di `main`, pakai worktree terpisah, mis. `git worktree add ../jariyah-main main`.
+- Commit atau push hanya bila diminta pengguna.

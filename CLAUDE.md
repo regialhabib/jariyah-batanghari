@@ -4,6 +4,7 @@
 
 - Spesifikasi, keputusan, dan progres ada di `docs/` (mulai dari `docs/README.md`; progres fase di `docs/07-tahapan-pengerjaan.md`). Catat setiap keputusan/penyimpangan di `docs/CHANGELOG.md`.
 - UI dan teks berbahasa Indonesia.
+- Dua branch: `main` (kode saja) dan `with-docs` (kode + `docs/` + file AI). Merge hanya `main` → `with-docs`, jangan sebaliknya. Lihat bagian "Branch Git" di `AGENTS.md`.
 - Role disimpan di kolom `users.role` (enum `App\Enums\Role`), hak akses lewat Gate di `App\Support\HakAkses`. Jangan tambahkan paket role/permission.
 - Semua perubahan status pengajuan wajib lewat `App\Services\PengajuanWorkflow`.
 - Composer: `php C:/laragon/bin/composer/composer.phar` (Composer global terlalu lama).

@@ -2,6 +2,11 @@
 
 Format: tanggal, apa yang diputuskan atau diubah, dan alasannya. Entri terbaru di atas.
 
+## 2026-10-25 (Dua branch: `main` dan `with-docs`)
+- **Dibuat branch `with-docs`** yang memuat `docs/` dan file AI environment; `main` tetap tanpa berkas-berkas itu. *Alasan:* `main` tetap bersih untuk dibagikan, sementara docs dan konfigurasi agent tetap punya riwayat di git.
+- **Arah merge hanya `main` → `with-docs`.** Aturan lengkap di `docs/README.md` bagian "Branch Git", ringkasannya di `AGENTS.md` dan `CLAUDE.md` agar semua agent tahu.
+- `.claude/settings.local.json` tetap diabaikan di kedua branch karena berisi pengaturan lokal.
+
 ## 2026-10-23 (Docs & file AI environment tidak lagi di-commit)
 - **Folder `docs/` dikeluarkan dari repo** (ditambahkan ke `.gitignore` dan dihapus dari index). Berkasnya tetap ada di disk dan tetap jadi sumber spesifikasi/progres lokal; riwayat lamanya masih ada di git.
 - `.gitignore` juga ditambah `/.ai`, `/.gemini`, `/GEMINI.md`, `/.github/copilot-instructions.md`, melengkapi file AI environment yang sudah diabaikan (`.claude`, `.cursor`, `AGENTS.md`, `CLAUDE.md`, `boost.json`, dll.).
