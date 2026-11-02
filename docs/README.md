@@ -28,7 +28,7 @@ Folder ini adalah sumber kebenaran untuk rancangan, keputusan, dan progres proye
 
 | Topik | Keputusan |
 |---|---|
-| Framework | Laravel 13 |
+| Framework | Laravel 12 |
 | Frontend | Livewire 4 (single-file components) + Flux UI + Tailwind CSS v4, auth via Fortify |
 | Database | MySQL via Laragon, nama database `jariyah_batanghari` |
 | Registrasi publik | Hanya untuk **Nazir**. Akun BPN dan KUA dibuat oleh Admin BPN. |

@@ -6,7 +6,7 @@
 
 | Lapisan | Pilihan |
 |---|---|
-| Backend | Laravel 13, PHP 8.4 |
+| Backend | Laravel 12, PHP 8.2 |
 | Autentikasi | Laravel Fortify (login, registrasi, lupa password, verifikasi email, konfirmasi password) |
 | UI | Livewire 4 **single-file components** (SFC) + Blade + Alpine.js (bawaan Livewire) |
 | Komponen UI | Flux UI (gratis) untuk input, tombol, dropdown, modal, toast, sidebar |
@@ -20,8 +20,8 @@
 | Kebutuhan | Paket |
 |---|---|
 | Role/hak akses | Kolom `users.role` + Gate Laravel (`App\Support\HakAkses`), tanpa paket |
-| Audit log | `spatie/laravel-activitylog` v5 (namespace `Spatie\Activitylog\Models\Concerns\LogsActivity`, `Spatie\Activitylog\Support\LogOptions`, method `dontLogEmptyChanges()`) |
-| Ekspor/impor Excel | `maatwebsite/excel` v4 |
+| Audit log | `spatie/laravel-activitylog` v4 (namespace `Spatie\Activitylog\Traits\LogsActivity`, `Spatie\Activitylog\LogOptions`, method `dontSubmitEmptyLogs()`; nilai lama/baru ada di `properties`) |
+| Ekspor/impor Excel | `maatwebsite/excel` v3.1 |
 | PDF laporan | `barryvdh/laravel-dompdf` v3 |
 | Sanitasi HTML | `mews/purifier` (helper `clean()`) |
 | Peta | `leaflet`, `@geoman-io/leaflet-geoman-free` (npm) |

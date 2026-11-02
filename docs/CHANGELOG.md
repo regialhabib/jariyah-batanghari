@@ -2,6 +2,15 @@
 
 Format: tanggal, apa yang diputuskan atau diubah, dan alasannya. Entri terbaru di atas.
 
+## 2026-11-02 (Turun ke PHP 8.2)
+- **Proyek kini berjalan di PHP 8.2** (`composer.json`: `php ^8.2`, `config.platform.php` dikunci ke `8.2.12`). *Alasan:* PHP pengguna 8.2.12, sedangkan Laravel 13 dan beberapa paket butuh 8.3/8.4. `config.platform` memastikan Composer tetap memilih paket yang cocok untuk 8.2 meski dijalankan dengan PHP lebih baru.
+- **Paket diturunkan:** Laravel 13 → 12, Symfony 8 → 7, `spatie/laravel-activitylog` v5 → v4, `maatwebsite/excel` v4 → v3.1, PHPUnit 12 → 11, Pint 1.32 → 1.30. `laravel/pao` dihapus karena semua versinya butuh PHP 8.3 (hanya alat dev, tidak dipakai kode aplikasi).
+- **Model kembali memakai properti `$fillable`/`$hidden`** karena atribut `#[Fillable]`/`#[Hidden]` hanya ada di Laravel 13.
+- **Log Aktivitas:** v4 menyimpan nilai lama/baru di `properties` (`attributes`, `old`), bukan kolom `attribute_changes`. Migrasi `sesuaikan_activity_log_untuk_activitylog_v4` memindahkan log lama ke `properties`, menghapus `attribute_changes`, dan menambah `batch_uuid`. Migrasi ini tidak punya `down()`: kembali ke v5 perlu memulihkan database dari cadangan.
+- **Excel:** `Concerns\Export` tidak ada di v3.1 sehingga dihapus dari `LaporanWakafExport`; `WithFreezePane` diganti event `AfterSheet` di `DataTanahSheet`.
+- **`Password::toPasswordRulesString()` hanya ada di Laravel 13**, diganti `App\Support\AturanPassword::keString()` untuk atribut `passwordrules`.
+- `phpstan.neon` memakai `phpVersion: 80200` agar sintaks di atas PHP 8.2 ikut terdeteksi; CI memakai PHP 8.2.
+
 ## 2026-10-25 (Dua branch: `main` dan `with-docs`)
 - **Dibuat branch `with-docs`** yang memuat `docs/` dan file AI environment; `main` tetap tanpa berkas-berkas itu. *Alasan:* `main` tetap bersih untuk dibagikan, sementara docs dan konfigurasi agent tetap punya riwayat di git.
 - **Arah merge hanya `main` → `with-docs`.** Aturan lengkap di `docs/README.md` bagian "Branch Git", ringkasannya di `AGENTS.md` dan `CLAUDE.md` agar semua agent tahu.

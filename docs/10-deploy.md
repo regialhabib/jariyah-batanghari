@@ -1,9 +1,9 @@
 # 10 · Catatan Deploy
 
-Panduan memasang Jariyah Batang Hari di server produksi (VPS Linux atau hosting yang mendukung PHP 8.3+ dan akses SSH).
+Panduan memasang Jariyah Batang Hari di server produksi (VPS Linux atau hosting yang mendukung PHP 8.2+ dan akses SSH).
 
 ## Kebutuhan server
-- PHP 8.3+ dengan ekstensi `pdo_mysql`, `mbstring`, `xml`, `curl`, `gd`, `zip`, `intl`, `fileinfo`, `bcmath`
+- PHP 8.2+ dengan ekstensi `pdo_mysql`, `mbstring`, `xml`, `curl`, `gd`, `zip`, `intl`, `fileinfo`, `bcmath`
 - MySQL 8 / MariaDB 10.6+
 - Nginx atau Apache, dengan **document root diarahkan ke folder `public/`**
 - Composer 2. Node.js hanya perlu untuk build aset, dan build bisa dilakukan di mesin lain lalu folder `public/build` diunggah.
