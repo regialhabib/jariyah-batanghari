@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Enums\KategoriDokumen;
 use App\Enums\StatusValidasiDokumen;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,10 +22,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read Pengajuan $pengajuan
  * @property-read Persyaratan|null $persyaratan
  */
-#[Fillable(['pengajuan_id', 'persyaratan_id', 'kategori', 'path', 'nama_asli', 'mime', 'ukuran', 'status_validasi', 'catatan'])]
 class PengajuanDokumen extends Model
 {
     use HasFactory;
+
+    /** @var list<string> */
+    protected $fillable = ['pengajuan_id', 'persyaratan_id', 'kategori', 'path', 'nama_asli', 'mime', 'ukuran', 'status_validasi', 'catatan'];
 
     protected function casts(): array
     {

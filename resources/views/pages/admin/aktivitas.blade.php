@@ -91,14 +91,15 @@ new #[Title('Log Aktivitas')] class extends Component {
     }
 
     /**
-     * Daftar perubahan [kolom, lama, baru] dari attribute_changes (model) atau properties dari/ke (pengajuan).
+     * Daftar perubahan [kolom, lama, baru] dari properties: attributes/old (model) atau dari/ke (pengajuan).
      *
      * @return list<array{0: string, 1: string|null, 2: string|null}>
      */
     public function perubahan(Activity $a): array
     {
-        $baru = (array) ($a->attribute_changes?->get('attributes') ?? []);
-        $lama = (array) ($a->attribute_changes?->get('old') ?? []);
+        $props = $a->properties?->all() ?? [];
+        $baru = (array) ($props['attributes'] ?? []);
+        $lama = (array) ($props['old'] ?? []);
         $baris = [];
 
         foreach (array_unique([...array_keys($lama), ...array_keys($baru)]) as $kolom) {
@@ -109,7 +110,6 @@ new #[Title('Log Aktivitas')] class extends Component {
             ];
         }
 
-        $props = $a->properties?->all() ?? [];
         if (isset($props['dari']) || isset($props['ke'])) {
             $baris[] = ['Status', $this->nilai('dari', $props['dari'] ?? null), $this->nilai('ke', $props['ke'] ?? null)];
         }

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\JenisPengajuan;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,10 +15,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $wajib
  * @property int $urutan
  */
-#[Fillable(['jenis_pengajuan', 'nama', 'keterangan', 'wajib', 'urutan'])]
 class Persyaratan extends Model
 {
     use HasFactory;
+
+    /** @var list<string> */
+    protected $fillable = ['jenis_pengajuan', 'nama', 'keterangan', 'wajib', 'urutan'];
 
     protected function casts(): array
     {

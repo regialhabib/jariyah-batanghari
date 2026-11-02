@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\StatusPengajuan;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -18,10 +17,12 @@ use Illuminate\Support\Carbon;
  * @property Carbon $created_at
  * @property-read User|null $user
  */
-#[Fillable(['pengajuan_id', 'user_id', 'dari_status', 'ke_status', 'catatan'])]
 class RiwayatPengajuan extends Model
 {
     public const UPDATED_AT = null;
+
+    /** @var list<string> */
+    protected $fillable = ['pengajuan_id', 'user_id', 'dari_status', 'ke_status', 'catatan'];
 
     protected function casts(): array
     {

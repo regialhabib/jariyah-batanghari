@@ -8,18 +8,19 @@ use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
-use Maatwebsite\Excel\Concerns\WithFreezePane;
+use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
  * @implements WithMapping<TanahWakaf>
  */
-class DataTanahSheet implements FromQuery, ShouldAutoSize, WithColumnFormatting, WithFreezePane, WithHeadings, WithMapping, WithStyles, WithTitle
+class DataTanahSheet implements FromQuery, ShouldAutoSize, WithColumnFormatting, WithEvents, WithHeadings, WithMapping, WithStyles, WithTitle
 {
     public function __construct(private readonly FilterLaporan $filter) {}
 
@@ -50,9 +51,13 @@ class DataTanahSheet implements FromQuery, ShouldAutoSize, WithColumnFormatting,
         return ['G' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1];
     }
 
-    public function freezePane(): string
+    public function registerEvents(): array
     {
-        return 'A2';
+        return [
+            AfterSheet::class => function (AfterSheet $event): void {
+                $event->sheet->getDelegate()->freezePane('A2');
+            },
+        ];
     }
 
     public function styles(Worksheet $sheet): array

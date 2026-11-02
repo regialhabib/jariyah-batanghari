@@ -4,8 +4,6 @@ namespace App\Models;
 
 use App\Enums\JenisPenggunaan;
 use App\Enums\StatusSertifikat;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,8 +12,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
-use Spatie\Activitylog\Models\Concerns\LogsActivity;
-use Spatie\Activitylog\Support\LogOptions;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @property int $id
@@ -43,15 +41,19 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property-read User|null $nazir
  * @property-read Desa $desa
  */
-#[Fillable([
-    'kode', 'nama', 'nazir_id', 'nama_nazir', 'wakif_nama', 'wakif_nik', 'desa_id', 'alamat', 'luas_m2',
-    'jenis_penggunaan', 'status_sertifikat', 'nomor_aiw', 'tanggal_aiw', 'nomor_sertifikat', 'tanggal_sertifikat',
-    'latitude', 'longitude', 'batas_geojson', 'foto', 'is_published', 'sumber',
-])]
-#[Hidden(['wakif_nik'])]
 class TanahWakaf extends Model
 {
     use HasFactory, LogsActivity;
+
+    /** @var list<string> */
+    protected $fillable = [
+        'kode', 'nama', 'nazir_id', 'nama_nazir', 'wakif_nama', 'wakif_nik', 'desa_id', 'alamat', 'luas_m2',
+        'jenis_penggunaan', 'status_sertifikat', 'nomor_aiw', 'tanggal_aiw', 'nomor_sertifikat', 'tanggal_sertifikat',
+        'latitude', 'longitude', 'batas_geojson', 'foto', 'is_published', 'sumber',
+    ];
+
+    /** @var list<string> */
+    protected $hidden = ['wakif_nik'];
 
     protected function casts(): array
     {
@@ -81,7 +83,7 @@ class TanahWakaf extends Model
             ->logAll()
             ->logExcept(['updated_at', 'created_at'])
             ->logOnlyDirty()
-            ->dontLogEmptyChanges()
+            ->dontSubmitEmptyLogs()
             ->useLogName('tanah_wakaf');
     }
 

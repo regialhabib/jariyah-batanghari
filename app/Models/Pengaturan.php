@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
@@ -15,10 +14,12 @@ use Illuminate\Support\Facades\Cache;
  * @property string|null $nilai
  * @property string $grup
  */
-#[Fillable(['kunci', 'nilai', 'grup'])]
 class Pengaturan extends Model
 {
     public const CACHE_KEY = 'pengaturan.semua';
+
+    /** @var list<string> */
+    protected $fillable = ['kunci', 'nilai', 'grup'];
 
     protected static function booted(): void
     {
