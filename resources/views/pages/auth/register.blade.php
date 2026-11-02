@@ -12,7 +12,7 @@
 
     <x-auth-session-status :status="session('status')" />
 
-    @php($aturanPassword = \Illuminate\Validation\Rules\Password::defaults()->toPasswordRulesString())
+    @php($aturanPassword = \App\Support\AturanPassword::keString())
 
     <form method="POST" action="{{ route('register.store') }}" class="flex flex-col gap-5">
         @csrf

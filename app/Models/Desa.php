@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,10 +15,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string|null $kode
  * @property-read Kecamatan $kecamatan
  */
-#[Fillable(['kecamatan_id', 'nama', 'jenis', 'kode'])]
 class Desa extends Model
 {
     use HasFactory;
+
+    /** @var list<string> */
+    protected $fillable = ['kecamatan_id', 'nama', 'jenis', 'kode'];
 
     /**
      * @return BelongsTo<Kecamatan, $this>

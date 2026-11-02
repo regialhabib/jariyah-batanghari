@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -17,9 +16,11 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $dibaca_at
  * @property Carbon $created_at
  */
-#[Fillable(['nama', 'kontak', 'isi', 'ip'])]
 class Pesan extends Model
 {
+    /** @var list<string> */
+    protected $fillable = ['nama', 'kontak', 'isi', 'ip'];
+
     protected function casts(): array
     {
         return ['dibaca_at' => 'datetime'];

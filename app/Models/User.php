@@ -5,8 +5,6 @@ namespace App\Models;
 use App\Enums\Role;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,8 +13,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
-use Spatie\Activitylog\Models\Concerns\LogsActivity;
-use Spatie\Activitylog\Support\LogOptions;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @property int $id
@@ -35,12 +33,16 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property Carbon|null $updated_at
  * @property-read Kecamatan|null $kecamatan
  */
-#[Fillable(['name', 'username', 'nik', 'email', 'phone', 'kecamatan_id', 'is_active', 'password'])]
-#[Hidden(['password', 'remember_token', 'nik'])]
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, LogsActivity, Notifiable;
+
+    /** @var list<string> */
+    protected $fillable = ['name', 'username', 'nik', 'email', 'phone', 'kecamatan_id', 'is_active', 'password'];
+
+    /** @var list<string> */
+    protected $hidden = ['password', 'remember_token', 'nik'];
 
     /**
      * @var array<string, mixed>
@@ -69,7 +71,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return LogOptions::defaults()
             ->logOnly(['name', 'username', 'role', 'email', 'phone', 'kecamatan_id', 'is_active'])
             ->logOnlyDirty()
-            ->dontLogEmptyChanges()
+            ->dontSubmitEmptyLogs()
             ->useLogName('pengguna');
     }
 

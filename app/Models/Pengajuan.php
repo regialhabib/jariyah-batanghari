@@ -6,7 +6,6 @@ use App\Enums\JenisPengajuan;
 use App\Enums\KategoriDokumen;
 use App\Enums\StatusPengajuan;
 use App\Enums\StatusValidasiDokumen;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -34,10 +33,12 @@ use Illuminate\Support\Carbon;
  * @property-read Collection<int, PengajuanDokumen> $dokumens
  * @property-read Collection<int, RiwayatPengajuan> $riwayats
  */
-#[Fillable(['jenis', 'tanah_wakaf_id', 'nazir_id', 'status'])]
 class Pengajuan extends Model
 {
     use HasFactory;
+
+    /** @var list<string> */
+    protected $fillable = ['jenis', 'tanah_wakaf_id', 'nazir_id', 'status'];
 
     protected function casts(): array
     {

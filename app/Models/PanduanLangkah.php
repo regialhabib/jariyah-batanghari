@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,10 +11,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $deskripsi
  * @property int $urutan
  */
-#[Fillable(['judul', 'deskripsi', 'urutan'])]
 class PanduanLangkah extends Model
 {
     use HasFactory;
+
+    /** @var list<string> */
+    protected $fillable = ['judul', 'deskripsi', 'urutan'];
 
     protected function casts(): array
     {

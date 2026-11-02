@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Models\Concerns\LogsActivity;
-use Spatie\Activitylog\Support\LogOptions;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * Artikel Informasi Wakaf. Kolom `isi` berisi HTML yang sudah disanitasi saat disimpan.
@@ -21,10 +20,12 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property int $urutan
  * @property bool $is_published
  */
-#[Fillable(['judul', 'slug', 'ikon', 'ringkasan', 'isi', 'urutan', 'is_published'])]
 class Artikel extends Model
 {
     use HasFactory, LogsActivity;
+
+    /** @var list<string> */
+    protected $fillable = ['judul', 'slug', 'ikon', 'ringkasan', 'isi', 'urutan', 'is_published'];
 
     protected function casts(): array
     {

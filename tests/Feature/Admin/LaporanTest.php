@@ -139,6 +139,7 @@ class LaporanTest extends TestCase
 
         $buku = IOFactory::load($respons->baseResponse->getFile()->getPathname());
         $this->assertSame(['Data Tanah Wakaf', 'Rekap per Kecamatan'], $buku->getSheetNames());
+        $this->assertSame('A2', $buku->getSheet(0)->getFreezePane());
 
         $data = $buku->getSheetByName('Data Tanah Wakaf')->toArray();
         $isi = json_encode($data);
